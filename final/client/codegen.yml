@@ -1,0 +1,14 @@
+overwrite: true
+schema:
+  - "C:\\Users\\mevon\\Documents\\React\\apollo\\fullstack-tutorial-update-v3\\fullstack-tutorial\\final\\client\\src\\index.tsx"
+  - "C:\\Users\\mevon\\Documents\\React\\apollo\\fullstack-tutorial-update-v3\\fullstack-tutorial\\final\\server\\src\\schema.js"
+documents: "C:\\Users\\mevon\\Documents\\React\\apollo\\fullstack-tutorial-update-v3\\fullstack-tutorial\\final\\client\\src\\**\\*.tsx"
+generates:
+  src/__generated-graphql-codegen__/graphql.tsx:
+    plugins:
+      - "typescript"
+      - "typescript-operations"
+      - "typescript-react-apollo"
+  ./graphql.schema.json:
+    plugins:
+      - "introspection"

@@ -3,7 +3,7 @@ import { gql, useQuery } from '@apollo/client';
 
 import { LaunchTile, Header, Button, Loading } from '../components';
 import { RouteComponentProps } from '@reach/router';
-import * as GetLaunchListTypes from './__generated__/GetLaunchList';
+import * as GetTypes from '../__generated-graphql-codegen__/graphql'
 
 export const LAUNCH_TILE_DATA = gql`
   fragment LaunchTile on Launch {
@@ -36,16 +36,19 @@ export const GET_LAUNCHES = gql`
 
 interface LaunchesProps extends RouteComponentProps {}
 
+// interface GetLaunchListCustom {
+//   launches: GetLaunchListTypes.GetLaunchList_launches;
+// }
+
 const Launches: React.FC<LaunchesProps> = () => {
   const {
     data,
     loading,
     error,
     fetchMore
-  } = useQuery<
-    GetLaunchListTypes.GetLaunchList,
-    GetLaunchListTypes.GetLaunchListVariables
-  >(GET_LAUNCHES);
+  } = useQuery<GetTypes.GetLaunchListQuery, GetTypes.GetLaunchListQueryVariables>(GET_LAUNCHES);
+  // typing the parameters, no variables used at the moment
+  // fetcMore is a built-in function to aid in paination
   const [isLoadingMore, setIsLoadingMore] = useState(false);
 
   if (loading) return <Loading />;
@@ -73,7 +76,7 @@ const Launches: React.FC<LaunchesProps> = () => {
                 setIsLoadingMore(false);
               }}
             >
-              Load More
+              Load More Launches
             </Button>
       )}
     </Fragment>

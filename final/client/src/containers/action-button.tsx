@@ -36,12 +36,14 @@ const CancelTripButton: React.FC<ActionButtonProps> = ({ id }) => {
       update(cache, { data: { cancelTrip } }) {
         // Update the user's cached list of trips to remove the trip that
         // was just canceled.
+        // the update function is called after the mutation completes
         const launch = cancelTrip.launches[0];
         cache.modify({
           id: cache.identify({
             __typename: 'User',
             id: localStorage.getItem('userId'),
           }),
+          // fields parameter sets out which cache fields should be modified and how
           fields: {
             trips(existingTrips: Reference[], { readField }) {
               return existingTrips.filter(

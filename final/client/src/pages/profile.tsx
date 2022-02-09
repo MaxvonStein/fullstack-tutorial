@@ -29,6 +29,7 @@ const Profile: React.FC<ProfileProps> = () => {
   } = useQuery<GetMyTripsTypes.GetMyTrips>(
     GET_MY_TRIPS,
     { fetchPolicy: "network-only" }
+    // query the network, don't use cached data
   );
   if (loading) return <Loading />;
   if (error) return <p>ERROR: {error.message}</p>;

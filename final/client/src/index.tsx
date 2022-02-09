@@ -12,16 +12,22 @@ import Pages from './pages';
 import Login from './pages/login';
 import injectStyles from './styles';
 import { cache } from './cache';
+// import typeDefs from './schema';
+// const typeDefs = require('./schema');
 
+
+// client-side schema
 export const typeDefs = gql`
   extend type Query {
     isLoggedIn: Boolean!
     cartItems: [ID!]!
   }
 `;
+// update to pull from local file for codegen
 
 // Set up our apollo-client to point at the server we created
 // this can be local or a remote endpoint
+// typed to a functoin call with a typed parameter
 const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
   cache,
   uri: 'http://localhost:4000/graphql',
@@ -52,6 +58,7 @@ const IS_LOGGED_IN = gql`
 
 function IsLoggedIn() {
   const { data } = useQuery(IS_LOGGED_IN);
+  // don't need loading or error fields since the querry is for client data only
   return data.isLoggedIn ? <Pages /> : <Login />;
 }
 

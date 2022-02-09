@@ -6,6 +6,7 @@ export const cache: InMemoryCache = new InMemoryCache({
       fields: {
         isLoggedIn: {
           read() {
+            // field policy read functions override values in the cache or the server
             return isLoggedInVar();
           }
         },
@@ -17,7 +18,9 @@ export const cache: InMemoryCache = new InMemoryCache({
         launches: {
           keyArgs: false,
           merge(existing, incoming) {
+            // field policy specific function tat specifies wat appens wen a field's value is written
             let launches: Reference[] = [];
+            // typed
             if (existing && existing.launches) {
               launches = launches.concat(existing.launches);
             }

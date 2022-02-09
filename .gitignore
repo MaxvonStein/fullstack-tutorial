@@ -1,3 +1,8 @@
 node_modules
 .DS_Store
 .env
+/final/server/package-lock.json
+/final/server/store.sqlite
+
+package-lock.json
+store.sqlite
