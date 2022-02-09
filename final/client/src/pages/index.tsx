@@ -5,6 +5,7 @@ import Launch from './launch';
 import Launches from './launches';
 import Cart from './cart';
 import Profile from './profile';
+import Batteries from './batteries';
 import { Footer, PageContainer } from '../components';
 
 export default function Pages() {
@@ -12,6 +13,7 @@ export default function Pages() {
     <Fragment>
       <PageContainer>
         <Router primary={false} component={Fragment}>
+          <Batteries path="/batteries" />
           <Launches path="/" />
           <Launch path="launch/:launchId" />
           <Cart path="cart" />

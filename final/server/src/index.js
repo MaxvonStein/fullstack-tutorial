@@ -1,72 +1,70 @@
-require('dotenv').config();
+require("dotenv").config();
 
-const { ApolloServer } = require('apollo-server');
-const isEmail = require('isemail');
+const { ApolloServer } = require("apollo-server");
+const { MongoClient } = require("mongodb");
+const isEmail = require("isemail");
 
-const typeDefs = require('./schema');
-const resolvers = require('./resolvers');
-const { createStore } = require('./utils');
+const typeDefs = require("./schema");
+const resolvers = require("./resolvers");
+const { createStore } = require("./utils");
+const ListingAPI = require("./datasources/listing");
 
-const LaunchAPI = require('./datasources/launch');
-const UserAPI = require('./datasources/user');
-
-// creates a sequelize connection once. NOT for every request
-const store = createStore();
-
-// set up any dataSources our resolvers need
-const dataSources = () => ({
-  launchAPI: new LaunchAPI(),
-  userAPI: new UserAPI({ store }),
-});
-
+// what's the new authentication mode?
 // the function that sets up the global context for each resolver, using the req
-const context = async ({ req }) => {
-  // simple auth check on every request
-  const auth = (req.headers && req.headers.authorization) || '';
-  const email = Buffer.from(auth, 'base64').toString('ascii');
+// const context = async ({ req }) => {
+//   // simple auth check on every request
+//   const auth = (req.headers && req.headers.authorization) || '';
+//   const email = Buffer.from(auth, 'base64').toString('ascii');
 
-  // if the email isn't formatted validly, return null for user
-  if (!isEmail.validate(email)) return { user: null };
-  // find a user by their email
-  const users = await store.users.findOrCreate({ where: { email } });
-  const user = users && users[0] ? users[0] : null;
+//   // if the email isn't formatted validly, return null for user
+//   if (!isEmail.validate(email)) return { user: null };
+//   // find a user by their email
+//   const users = await store.users.findOrCreate({ where: { email } });
+//   const user = users && users[0] ? users[0] : null;
 
-  return { user };
+//   return { user };
+// };
+
+// from other project
+// quick try based on: https://stackoverflow.com/questions/59657450/mongoerror-topology-is-closed-please-connect
+const dbURL = `mongodb+srv://${process.env.MONGO_USER_USERNAME}:${process.env.MONGO_USER_PASSWORD}@battery-marketplace.g9e2h.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
+const dbName = "battery-marketplace-database";
+
+const init = (db) => {
+  return new ApolloServer({
+    typeDefs,
+    resolvers,
+    dataSources: () => ({
+      listingAPI: new ListingAPI(db.collection("listings")),
+    }),
+  });
 };
 
-// Set up Apollo Server
-const server = new ApolloServer({
-  typeDefs,
-  resolvers,
-  dataSources,
-  context,
-  introspection: true,
-  apollo: {
-    key: process.env.APOLLO_KEY,
-  },
-});
+// Use .connect() instead of new MongoClient
+// Pass the new db to the init function defined above once it's been defined
+// Call server.listen() from within MongoClient
+MongoClient.connect(
+  dbURL,
+  { useNewUrlParser: true, useUnifiedTopology: true },
+  (error, client) => {
+    if (error) console.log("error: ", error);
+    const db = client.db(dbName);
+    console.log(`Mongo database ${dbName} at ${dbURL}`);
 
-// Start our server if we're not in a test env.
-// if we're in a test env, we'll manually start it in a test
-if (process.env.NODE_ENV !== 'test') {
-  server.listen().then(() => {
-    console.log(`
-      Server is running!
-      Listening on port 4000
-      Explore at https://studio.apollographql.com/sandbox
-    `);
-  });
-}
+    const server = init(db);
+
+    server.listen({ port: process.env.PORT || 4000 }).then(({ url }) => {
+      console.log(`Server ready at ${url}`);
+    });
+  }
+);
 
 // export all the important pieces for integration/e2e tests to use
 module.exports = {
-  dataSources,
-  context,
+  // dataSources,
   typeDefs,
   resolvers,
   ApolloServer,
-  LaunchAPI,
-  UserAPI,
-  store,
-  server,
+  ListingAPI,
+  // server,
 };

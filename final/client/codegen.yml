@@ -1,8 +1,8 @@
 overwrite: true
 schema:
-  - "C:\\Users\\mevon\\Documents\\React\\apollo\\fullstack-tutorial-update-v3\\fullstack-tutorial\\final\\client\\src\\index.tsx"
+  - "./src/index.tsx"
   - "C:\\Users\\mevon\\Documents\\React\\apollo\\fullstack-tutorial-update-v3\\fullstack-tutorial\\final\\server\\src\\schema.js"
-documents: "C:\\Users\\mevon\\Documents\\React\\apollo\\fullstack-tutorial-update-v3\\fullstack-tutorial\\final\\client\\src\\**\\*.tsx"
+documents: "./src/**/*.tsx"
 generates:
   src/__generated-graphql-codegen__/graphql.tsx:
     plugins:

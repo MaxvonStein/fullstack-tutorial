@@ -21,6 +21,7 @@ export type Query = {
   isLoggedIn: Scalars['Boolean'];
   launch?: Maybe<Launch>;
   launches: LaunchConnection;
+  listings?: Maybe<Array<Maybe<Battery>>>;
   me?: Maybe<User>;
 };
 
@@ -79,6 +80,13 @@ export type LaunchConnection = {
   launches: Array<Maybe<Launch>>;
 };
 
+export type Battery = {
+  __typename?: 'Battery';
+  generation: Scalars['String'];
+  make: Scalars['String'];
+  model: Scalars['String'];
+};
+
 export type User = {
   __typename?: 'User';
   email: Scalars['String'];
@@ -116,6 +124,13 @@ export type TripUpdateResponse = {
   message?: Maybe<Scalars['String']>;
   success: Scalars['Boolean'];
 };
+
+export type LaunchTileFragment = { __typename: 'Launch', id: string, isBooked: boolean, rocket?: { __typename?: 'Rocket', id: string, name?: string | null } | null, mission?: { __typename?: 'Mission', name?: string | null, missionPatch?: string | null } | null };
+
+export type GetListingListQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetListingListQuery = { __typename?: 'Query', listings?: Array<{ __typename: 'Battery', make: string, model: string } | null> | null };
 
 export type CancelMutationVariables = Exact<{
   launchId: Scalars['ID'];
@@ -155,8 +170,6 @@ export type LaunchDetailsQueryVariables = Exact<{
 
 export type LaunchDetailsQuery = { __typename?: 'Query', launch?: { __typename: 'Launch', site?: string | null, id: string, isBooked: boolean, rocket?: { __typename?: 'Rocket', type?: string | null, id: string, name?: string | null } | null, mission?: { __typename?: 'Mission', name?: string | null, missionPatch?: string | null } | null } | null };
 
-export type LaunchTileFragment = { __typename: 'Launch', id: string, isBooked: boolean, rocket?: { __typename?: 'Rocket', id: string, name?: string | null } | null, mission?: { __typename?: 'Mission', name?: string | null, missionPatch?: string | null } | null };
-
 export type GetLaunchListQueryVariables = Exact<{
   after?: InputMaybe<Scalars['String']>;
 }>;
@@ -191,6 +204,42 @@ export const LaunchTileFragmentDoc = gql`
   }
 }
     `;
+export const GetListingListDocument = gql`
+    query GetListingList {
+  listings {
+    __typename
+    make
+    model
+  }
+}
+    `;
+
+/**
+ * __useGetListingListQuery__
+ *
+ * To run a query within a React component, call `useGetListingListQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetListingListQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetListingListQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetListingListQuery(baseOptions?: Apollo.QueryHookOptions<GetListingListQuery, GetListingListQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetListingListQuery, GetListingListQueryVariables>(GetListingListDocument, options);
+      }
+export function useGetListingListLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetListingListQuery, GetListingListQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetListingListQuery, GetListingListQueryVariables>(GetListingListDocument, options);
+        }
+export type GetListingListQueryHookResult = ReturnType<typeof useGetListingListQuery>;
+export type GetListingListLazyQueryHookResult = ReturnType<typeof useGetListingListLazyQuery>;
+export type GetListingListQueryResult = Apollo.QueryResult<GetListingListQuery, GetListingListQueryVariables>;
 export const CancelDocument = gql`
     mutation cancel($launchId: ID!) {
   cancelTrip(launchId: $launchId) {

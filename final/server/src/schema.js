@@ -1,4 +1,4 @@
-const { gql } = require('apollo-server');
+const { gql } = require("apollo-server");
 
 const typeDefs = gql`
   type Query {
@@ -14,6 +14,7 @@ const typeDefs = gql`
     ): LaunchConnection!
     launch(id: ID!): Launch
     me: User
+    listings: [Battery]
   }
 
   type Mutation {
@@ -68,6 +69,12 @@ const typeDefs = gql`
   type Mission {
     name: String
     missionPatch(size: PatchSize): String
+  }
+
+  type Battery {
+    make: String!
+    model: String!
+    generation: String!
   }
 
   enum PatchSize {

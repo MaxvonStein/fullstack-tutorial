@@ -21,7 +21,7 @@ export const LAUNCH_TILE_DATA = gql`
   }
 `;
 
-export const GET_LAUNCHES = gql`
+export const GET_LAUNCHES_TESTING = gql`
   query GetLaunchList($after: String) {
     launches(after: $after) {
       cursor
@@ -34,7 +34,7 @@ export const GET_LAUNCHES = gql`
   ${LAUNCH_TILE_DATA}
 `;
 
-interface LaunchesProps extends RouteComponentProps {}
+interface LaunchesProps extends RouteComponentProps { }
 
 // interface GetLaunchListCustom {
 //   launches: GetLaunchListTypes.GetLaunchList_launches;
@@ -46,7 +46,7 @@ const Launches: React.FC<LaunchesProps> = () => {
     loading,
     error,
     fetchMore
-  } = useQuery<GetTypes.GetLaunchListQuery, GetTypes.GetLaunchListQueryVariables>(GET_LAUNCHES);
+  } = useQuery<GetTypes.GetLaunchListQuery, GetTypes.GetLaunchListQueryVariables>(GET_LAUNCHES_TESTING);
   // typing the parameters, no variables used at the moment
   // fetcMore is a built-in function to aid in paination
   const [isLoadingMore, setIsLoadingMore] = useState(false);
@@ -66,18 +66,18 @@ const Launches: React.FC<LaunchesProps> = () => {
         isLoadingMore
           ? <Loading />
           : <Button
-              onClick={async () => {
-                setIsLoadingMore(true);
-                await fetchMore({
-                  variables: {
-                    after: data.launches.cursor,
-                  },
-                });
-                setIsLoadingMore(false);
-              }}
-            >
-              Load More Launches
-            </Button>
+            onClick={async () => {
+              setIsLoadingMore(true);
+              await fetchMore({
+                variables: {
+                  after: data.launches.cursor,
+                },
+              });
+              setIsLoadingMore(false);
+            }}
+          >
+            Load More Launches
+          </Button>
       )}
     </Fragment>
   );
