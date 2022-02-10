@@ -28,7 +28,10 @@ module.exports = {
       dataSources.launchAPI.getLaunchById({ launchId: id }),
     me: async (_, __, { dataSources }) =>
       dataSources.userAPI.findOrCreateUser(),
-    listings: (_, __, { dataSources }) => dataSources.listingAPI.getListings(),
+    listings: (_, __, { dataSources }) => {
+      console.log(dataSources);
+      return dataSources.listingAPI.getListings();
+    },
   },
   Mutation: {
     bookTrips: async (_, { launchIds }, { dataSources }) => {
