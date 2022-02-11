@@ -22,7 +22,6 @@ const dbURL = `mongodb+srv://${process.env.MONGO_USER_USERNAME}:${process.env.MO
 const dbName = "battery-marketplace-database";
 
 // source: https://github.com/GraphQLGuide/apollo-datasource-mongodb/
-
 MongoClient.connect(
   dbURL,
   {
@@ -30,15 +29,39 @@ MongoClient.connect(
     useUnifiedTopology: true,
   },
   (error, client) => {
-    console.log(client);
+    // callback - MongoClient.connect
     var db = client.db(dbName);
-    console.log(db);
+
+    // source: https://www.apollographql.com/blog/backend/auth/email-password-authentication-with-accounts-js/
+    const accountsPassword = new AccountsPassword({});
+    const accountsMongo = new Mongo(db, {});
+    const accountsServer = new AccountsServer(
+      {
+        db: accountsMongo,
+        // Replace this value with a strong secret
+        tokenSecret: "my-super-random-secret",
+      },
+      {
+        password: accountsPassword,
+      }
+    );
+
+    console.log(accountsServer);
+
+    // We generate the accounts-js GraphQL module
+    const accountsGraphQL = AccountsModule.forRoot({ accountsServer });
+
     const server = new ApolloServer({
-      typeDefs,
-      resolvers,
+      typeDefs: mergeTypeDefs([typeDefs, accountsGraphQL.typeDefs]),
+      resolvers: mergeResolvers([accountsGraphQL.resolvers, resolvers]),
+      schemaDirectives: {
+        ...accountsGraphQL.schemaDirectives,
+      },
+      context: accountsGraphQL.context,
       dataSources: () => {
         return {
           listingAPI: new ListingAPI(db.collection("listings")),
+          // do we need another datasource here for accounts in order to make resolvers wokr
         };
       },
     });
