@@ -72,6 +72,7 @@ MongoClient.connect(
 );
 
 // export all the important pieces for integration/e2e tests to use
+// [] add other servers here
 module.exports = {
   // dataSources,
   typeDefs,

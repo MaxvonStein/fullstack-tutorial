@@ -13,7 +13,7 @@ const typeDefs = gql`
       after: String
     ): LaunchConnection!
     launch(id: ID!): Launch
-    me: User
+    me: BasicUser
     listings: [Battery]
   }
 
@@ -58,7 +58,7 @@ const typeDefs = gql`
     type: String
   }
 
-  type User {
+  type BasicUser {
     id: ID!
     email: String!
     profileImage: String
