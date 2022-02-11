@@ -1,6 +1,8 @@
 const { gql } = require("apollo-server");
 
+// source (directive): https://www.accountsjs.com/docs/getting-started/
 const typeDefs = gql`
+  directive @auth on FIELD_DEFINITION | OBJECT
   type Query {
     launches(
       """
@@ -15,6 +17,7 @@ const typeDefs = gql`
     launch(id: ID!): Launch
     me: BasicUser
     listings: [Battery]
+    sensitiveInformation: String @auth
   }
 
   type Mutation {

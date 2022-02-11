@@ -32,6 +32,7 @@ module.exports = {
       console.log(dataSources);
       return dataSources.listingAPI.getListings();
     },
+    sensitiveInformation: () => "sensitive information here",
   },
   Mutation: {
     bookTrips: async (_, { launchIds }, { dataSources }) => {

@@ -2,6 +2,7 @@ require("dotenv").config();
 
 const { ApolloServer } = require("apollo-server");
 const { MongoClient } = require("mongodb");
+const { makeExecutableSchema } = require("@graphql-tools/schema");
 
 const { AccountsModule } = require("@accounts/graphql-api");
 const { AccountsServer } = require("@accounts/server");
@@ -20,6 +21,8 @@ const ListingAPI = require("./datasources/listing");
 // quick try based on: https://stackoverflow.com/questions/59657450/mongoerror-topology-is-closed-please-connect
 const dbURL = `mongodb+srv://${process.env.MONGO_USER_USERNAME}:${process.env.MONGO_USER_PASSWORD}@battery-marketplace.g9e2h.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
 const dbName = "battery-marketplace-database";
+
+const { mapSchema, getDirective, MapperKind } = require("@graphql-tools/utils");
 
 // source: https://github.com/GraphQLGuide/apollo-datasource-mongodb/
 MongoClient.connect(
@@ -51,17 +54,61 @@ MongoClient.connect(
     // We generate the accounts-js GraphQL module
     const accountsGraphQL = AccountsModule.forRoot({ accountsServer });
 
-    const server = new ApolloServer({
+    // source: https://www.apollographql.com/docs/apollo-server/schema/creating-directives/
+    function authDirectiveTransformer(schema, directiveName) {
+      return mapSchema(schema, {
+        // Executes once for each object field in the schema
+        [MapperKind.OBJECT_FIELD]: (fieldConfig) => {
+          // Check whether this field has the specified directive
+          const upperDirective = getDirective(
+            schema,
+            fieldConfig,
+            directiveName
+          )?.[0];
+
+          if (upperDirective) {
+            // Get this field's original resolver
+            const { resolve = defaultFieldResolver } = fieldConfig;
+
+            // Replace the original resolver with a function that *first* calls
+            // the original resolver, then converts its result to upper case
+            fieldConfig.resolve = async function (source, args, context, info) {
+              const result = await resolve(source, args, context, info);
+              if (typeof result === "string") {
+                return result.toUpperCase();
+              }
+              return result;
+            };
+            return fieldConfig;
+          }
+        },
+      });
+    }
+
+    // source: https://github.com/pradel/accounts-js-server-tutorial/blob/master/index.js
+    let schema = makeExecutableSchema({
       typeDefs: mergeTypeDefs([typeDefs, accountsGraphQL.typeDefs]),
       resolvers: mergeResolvers([accountsGraphQL.resolvers, resolvers]),
       schemaDirectives: {
         ...accountsGraphQL.schemaDirectives,
       },
+    });
+
+    schema = authDirectiveTransformer(schema, "auth");
+
+    console.log(accountsGraphQL.schemaDirectives);
+
+    const server = new ApolloServer({
+      // typeDefs: mergeTypeDefs([typeDefs, accountsGraphQL.typeDefs]),
+      // resolvers: mergeResolvers([resolvers, accountsGraphQL.resolvers]),
+      // schemaDirectives: {
+      //   ...accountsGraphQL.schemaDirectives,
+      // },
+      schema,
       context: accountsGraphQL.context,
       dataSources: () => {
         return {
           listingAPI: new ListingAPI(db.collection("listings")),
-          // do we need another datasource here for accounts in order to make resolvers wokr
         };
       },
     });
@@ -72,7 +119,7 @@ MongoClient.connect(
 );
 
 // export all the important pieces for integration/e2e tests to use
-// [] add other servers here
+// # add other servers here
 module.exports = {
   // dataSources,
   typeDefs,
