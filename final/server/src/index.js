@@ -4,9 +4,14 @@ const { ApolloServer } = require("apollo-server");
 const { MongoClient } = require("mongodb");
 const { makeExecutableSchema } = require("@graphql-tools/schema");
 
-const { AccountsModule } = require("@accounts/graphql-api");
+const {
+  AccountsModule,
+  AuthenticatedDirective,
+  authenticated,
+} = require("@accounts/graphql-api");
 const { AccountsServer } = require("@accounts/server");
 const { AccountsPassword } = require("@accounts/password");
+// const { authenticated } = require("@accounts/boost");
 const { Mongo } = require("@accounts/mongo");
 
 const { mergeTypeDefs, mergeResolvers } = require("@graphql-tools/merge");
@@ -49,8 +54,6 @@ MongoClient.connect(
       }
     );
 
-    console.log(accountsServer);
-
     // We generate the accounts-js GraphQL module
     const accountsGraphQL = AccountsModule.forRoot({ accountsServer });
 
@@ -74,10 +77,18 @@ MongoClient.connect(
             // the original resolver, then converts its result to upper case
             fieldConfig.resolve = async function (source, args, context, info) {
               const result = await resolve(source, args, context, info);
+              // if (typeof result === "string") {
+              //   return result.toUpperCase();
+              // }
+              // return result;
+              console.log(result);
               if (typeof result === "string") {
-                return result.toUpperCase();
+                authenticated((root, args, context, info = result) => {
+                  console.log("root", root);
+                  console.log("args", args);
+                  return result;
+                });
               }
-              return result;
             };
             return fieldConfig;
           }
@@ -95,12 +106,17 @@ MongoClient.connect(
     });
 
     schema = authDirectiveTransformer(schema, "auth");
+    // source: https://community.apollographql.com/t/what-is-up-with-schema-directives-right-now/1031/6
+    // SchemaDirectiveVisitor.visitSchemaDirectives(schema, directives);
 
-    console.log(accountsGraphQL.schemaDirectives);
+    // AuthenticatedDirective();
+
+    // console.log(accountsGraphQL.schemaDirectives);
 
     const server = new ApolloServer({
       // typeDefs: mergeTypeDefs([typeDefs, accountsGraphQL.typeDefs]),
       // resolvers: mergeResolvers([resolvers, accountsGraphQL.resolvers]),
+      // dropped for v3
       // schemaDirectives: {
       //   ...accountsGraphQL.schemaDirectives,
       // },

@@ -1,4 +1,6 @@
 const { paginateResults } = require("./utils");
+const AccountsServer = require("@accounts/server");
+const { authenticated } = require("@accounts/graphql-api");
 
 module.exports = {
   Query: {
@@ -33,6 +35,9 @@ module.exports = {
       return dataSources.listingAPI.getListings();
     },
     sensitiveInformation: () => "sensitive information here",
+    authenticatedQuery: authenticated((root, args, context) => {
+      return "authenticated information here";
+    }),
   },
   Mutation: {
     bookTrips: async (_, { launchIds }, { dataSources }) => {

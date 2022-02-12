@@ -18,6 +18,7 @@ const typeDefs = gql`
     me: BasicUser
     listings: [Battery]
     sensitiveInformation: String @auth
+    authenticatedQuery: String
   }
 
   type Mutation {
