@@ -34,7 +34,9 @@ module.exports = {
       console.log(dataSources);
       return dataSources.listingAPI.getListings();
     },
-    sensitiveInformation: () => "sensitive information here",
+    sensitiveInformation: () => {
+      return "sensitive information here";
+    },
     authenticatedQuery: authenticated((root, args, context) => {
       return "authenticated information here";
     }),

@@ -58,7 +58,7 @@ MongoClient.connect(
     const accountsGraphQL = AccountsModule.forRoot({ accountsServer });
 
     // source: https://www.apollographql.com/docs/apollo-server/schema/creating-directives/
-    function authDirectiveTransformer(schema, directiveName) {
+    function authenticatedDirectiveTransformer(schema, directiveName) {
       return mapSchema(schema, {
         // Executes once for each object field in the schema
         [MapperKind.OBJECT_FIELD]: (fieldConfig) => {
@@ -75,19 +75,11 @@ MongoClient.connect(
 
             // Replace the original resolver with a function that *first* calls
             // the original resolver, then converts its result to upper case
-            fieldConfig.resolve = async function (source, args, context, info) {
+            fieldConfig.resolve = async (source, args, context, info) => {
               const result = await resolve(source, args, context, info);
-              // if (typeof result === "string") {
-              //   return result.toUpperCase();
-              // }
-              // return result;
-              console.log(result);
-              if (typeof result === "string") {
-                authenticated((root, args, context, info = result) => {
-                  console.log("root", root);
-                  console.log("args", args);
-                  return result;
-                });
+              if (authenticated((source, args, context))) {
+                // is authenticated's root param equivalent to source?
+                return result;
               }
             };
             return fieldConfig;
@@ -105,7 +97,7 @@ MongoClient.connect(
       },
     });
 
-    schema = authDirectiveTransformer(schema, "auth");
+    schema = authenticatedDirectiveTransformer(schema, "auth");
     // source: https://community.apollographql.com/t/what-is-up-with-schema-directives-right-now/1031/6
     // SchemaDirectiveVisitor.visitSchemaDirectives(schema, directives);
 
