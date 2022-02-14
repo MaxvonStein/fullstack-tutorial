@@ -12,17 +12,17 @@ export default function Footer() {
   return (
     <Container>
       <InnerContainer>
-        <MenuItem to="/">
+        <MenuItem to="/batteries">
           <HomeIcon />
-          Home
+          Batteries
         </MenuItem>
         <MenuItem to="/cart">
           <CartIcon />
           Cart
         </MenuItem>
-        <MenuItem to="/profile">
+        <MenuItem to="/login">
           <ProfileIcon />
-          Profile
+          Login
         </MenuItem>
         <LogoutButton />
       </InnerContainer>

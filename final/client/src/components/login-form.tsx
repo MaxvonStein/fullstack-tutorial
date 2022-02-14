@@ -29,7 +29,8 @@ export default class LoginForm extends Component<LoginFormProps, LoginFormState>
 
   onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    this.props.login({ variables: { serviceName: "", params: { user: { username: this.state.username }, password: this.state.password } } });
+    console.log("form submit")
+    this.props.login({ variables: { serviceName: "password", params: { user: { email: this.state.username }, password: this.state.password } } });
   };
 
   render() {
@@ -37,6 +38,7 @@ export default class LoginForm extends Component<LoginFormProps, LoginFormState>
       <form onSubmit={(e) => this.onSubmit(e)}>
         <input name="username" type="text" onChange={(e) => this.onChange(e)} />
         <input name="password" type="text" onChange={(e) => this.onChange(e)} />
+        <Button type="submit">Submit</Button>
       </form>
     )
   }

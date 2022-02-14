@@ -3,7 +3,7 @@ import { gql, useQuery } from '@apollo/client';
 
 import { LaunchTile, Header, Button, Loading } from '../components';
 import { RouteComponentProps } from '@reach/router';
-import * as GetTypes from '../__generated-graphql-codegen__/graphql'
+import * as GetTypes from '../__generated-graphql-codegen__/types'
 
 export const LAUNCH_TILE_DATA = gql`
   fragment LaunchTile on Launch {

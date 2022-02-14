@@ -46,8 +46,10 @@ export default function Login() {
   >(
     LOGIN_USER,
     {
-      onCompleted({ authenticate }) {
+      onCompleted(authenticate) {
+        console.log(authenticate)
         if (authenticate) {
+          console.log(authenticate)
           // localStorage.setItem('token', login.token as string);
           // localStorage.setItem('userId', login.id as string);
           isLoggedInVar(true);

@@ -3,7 +3,7 @@ import { gql, useQuery } from '@apollo/client';
 
 import { LaunchTile, Header, Button, Loading } from '../components';
 import { RouteComponentProps } from '@reach/router';
-import * as GetTypes from '../__generated-graphql-codegen__/graphql'
+import * as GetTypes from '../__generated-graphql-codegen__/types'
 import Link from '@mui/material/Link'
 import Stack from '@mui/material/Stack';
 import BatteryItem from '../components/battery-item';
