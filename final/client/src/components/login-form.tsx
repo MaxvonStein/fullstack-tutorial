@@ -3,24 +3,25 @@ import Button from '@mui/material/Button';
 
 import { accountsPassword } from '../utils/accounts';
 import { LoginUserPasswordService } from "@accounts/types"
-import * as GetTypes from '../__generated-graphql-codegen__/graphql';
+import * as GetTypes from '../__generated-graphql-codegen__/types';
 
 interface LoginFormProps {
-  // no types
-  login: (a: { variables: LoginUserPasswordService }) => void;
+  // don't get what a is here
+  login: (a: { variables: GetTypes.LoginUserMutationVariables }) => void;
 }
+
 interface LoginFormState {
-  email: string;
+  username: string;
   password: string;
 }
 
 export default class LoginForm extends Component<LoginFormProps, LoginFormState> {
-  state = { email: '', password: '' };
+  state = { username: '', password: '' };
 
   onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const input = (event.target as HTMLInputElement).value;
-    if (event.target.name === "email") {
-      this.setState(s => ({ email: input }));
+    if (event.target.name === "username") {
+      this.setState(s => ({ username: input }));
     } else if (event.target.name === "password") {
       this.setState(s => ({ password: input }));
     }
@@ -28,13 +29,13 @@ export default class LoginForm extends Component<LoginFormProps, LoginFormState>
 
   onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    this.props.login({ variables: { user: { email: this.state.email }, password: this.state.password } });
+    this.props.login({ variables: { serviceName: "", params: { user: { username: this.state.username }, password: this.state.password } } });
   };
 
   render() {
     return (
       <form onSubmit={(e) => this.onSubmit(e)}>
-        <input name="email" type="text" onChange={(e) => this.onChange(e)} />
+        <input name="username" type="text" onChange={(e) => this.onChange(e)} />
         <input name="password" type="text" onChange={(e) => this.onChange(e)} />
       </form>
     )

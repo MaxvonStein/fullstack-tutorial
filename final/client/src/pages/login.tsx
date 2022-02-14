@@ -3,15 +3,11 @@ import { gql, useMutation } from '@apollo/client';
 
 import { LoginForm, Loading } from '../components';
 import { isLoggedInVar } from '../cache';
-import * as GetTypes from '../__generated-graphql-codegen__/graphql'
+import { AuthenticateParamsInput } from '../__generated-graphql-codegen__/types'
+// imported seperately to avoid a graphql syntax error inside mutation definition
+import * as GetTypes from '../__generated-graphql-codegen__/types'
 import * as LoginTypes from './__generated__/Login'
 import { AuthenticationService, LoginUserPasswordService } from '@accounts/types';
-
-// is there a params input
-export interface LoginVariables {
-  serviceName: string;
-  params: ...
-}
 
 export const LOGIN_USER = gql`
   mutation LoginUser($serviceName: String!, $params: AuthenticateParamsInput!) {
@@ -30,24 +26,30 @@ export const LOGIN_USER = gql`
     }
   }
 }
-}
 `;
+
+// export interface LoginUserPasswordService {
+//   user: string | LoginUserIdentity;
+//   password: string;
+//   // 2FA code
+//   code?: string;
+// }
 
 export default function Login() {
   const [login, { loading, error }] = useMutation<
     // # find appropriate types here from accounts/types
     // or define
-    // add callback type, was:
-    LoginTypes.Login,
+    // add mutation function type, was:
+    GetTypes.LoginUserMutation,
     // LoginTypes.LoginVariables
-    LoginUserPasswordService,
+    GetTypes.LoginUserMutationVariables
   >(
     LOGIN_USER,
     {
-      onCompleted({ login }) {
-        if (login) {
-          localStorage.setItem('token', login.token as string);
-          localStorage.setItem('userId', login.id as string);
+      onCompleted({ authenticate }) {
+        if (authenticate) {
+          // localStorage.setItem('token', login.token as string);
+          // localStorage.setItem('userId', login.id as string);
           isLoggedInVar(true);
         }
       }

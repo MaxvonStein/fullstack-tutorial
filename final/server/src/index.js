@@ -130,8 +130,6 @@ module.exports = {
   // dataSources,
   typeDefs,
   resolvers,
-  accountsResolvers: accountsGraphQL.resolvers,
-  accountsTypeDefs: accountsGraphQL.typeDefs,
   ApolloServer,
   ListingAPI,
   // server,
