@@ -75,7 +75,7 @@ module.exports = {
         launches: [launch],
       };
     },
-    login: async (_, { email }, { dataSources }) => {
+    basicLogin: async (_, { email }, { dataSources }) => {
       const user = await dataSources.userAPI.findOrCreateUser({ email });
       if (user) {
         user.token = Buffer.from(email).toString("base64");

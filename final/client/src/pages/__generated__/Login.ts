@@ -13,9 +13,9 @@ export interface Login_login {
   token: string | null;
 }
 
-export interface Login {
-  login: Login_login | null;
-}
+// export interface Login {
+//   login: Login_login | null;
+// }
 
 export interface LoginVariables {
   email: string;

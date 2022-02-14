@@ -4,11 +4,7 @@ const { ApolloServer } = require("apollo-server");
 const { MongoClient } = require("mongodb");
 const { makeExecutableSchema } = require("@graphql-tools/schema");
 
-const {
-  AccountsModule,
-  AuthenticatedDirective,
-  authenticated,
-} = require("@accounts/graphql-api");
+const { AccountsModule, authenticated } = require("@accounts/graphql-api");
 const { AccountsServer } = require("@accounts/server");
 const { AccountsPassword } = require("@accounts/password");
 // const { authenticated } = require("@accounts/boost");
@@ -46,12 +42,14 @@ MongoClient.connect(
     const accountsServer = new AccountsServer(
       {
         db: accountsMongo,
-        // Replace this value with a strong secret
+        // # Replace this value with a strong secret
         tokenSecret: "my-super-random-secret",
       },
       {
+        // what's this for?
         password: accountsPassword,
       }
+      // # setvsendEmail param here, details: https://www.accountsjs.com/docs/email/
     );
 
     // We generate the accounts-js GraphQL module
@@ -132,6 +130,8 @@ module.exports = {
   // dataSources,
   typeDefs,
   resolvers,
+  accountsResolvers: accountsGraphQL.resolvers,
+  accountsTypeDefs: accountsGraphQL.typeDefs,
   ApolloServer,
   ListingAPI,
   // server,

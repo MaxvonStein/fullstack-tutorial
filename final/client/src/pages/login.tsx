@@ -3,21 +3,44 @@ import { gql, useMutation } from '@apollo/client';
 
 import { LoginForm, Loading } from '../components';
 import { isLoggedInVar } from '../cache';
-import * as LoginTypes from './__generated__/Login';
+import * as GetTypes from '../__generated-graphql-codegen__/graphql'
+import * as LoginTypes from './__generated__/Login'
+import { AuthenticationService, LoginUserPasswordService } from '@accounts/types';
+
+// is there a params input
+export interface LoginVariables {
+  serviceName: string;
+  params: ...
+}
 
 export const LOGIN_USER = gql`
-  mutation Login($email: String!) {
-    login(email: $email) {
-      id
-      token
+  mutation LoginUser($serviceName: String!, $params: AuthenticateParamsInput!) {
+  authenticate(serviceName: $serviceName, params: $params) {
+    sessionId
+    tokens {
+      refreshToken
+      accessToken
+    }
+    user {
+      emails {
+        address
+        verified
+      }
+      username
     }
   }
+}
+}
 `;
 
 export default function Login() {
   const [login, { loading, error }] = useMutation<
+    // # find appropriate types here from accounts/types
+    // or define
+    // add callback type, was:
     LoginTypes.Login,
-    LoginTypes.LoginVariables
+    // LoginTypes.LoginVariables
+    LoginUserPasswordService,
   >(
     LOGIN_USER,
     {
