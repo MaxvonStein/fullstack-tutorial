@@ -5,7 +5,6 @@ schema:
 documents:
   - "./src/**/*.tsx"
   - "!./src/__generated-graphql-codegen__/types.ts"
-
 generates:
   src/__generated-graphql-codegen__/types.ts:
     plugins:
