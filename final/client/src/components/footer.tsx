@@ -16,6 +16,10 @@ export default function Footer() {
           <HomeIcon />
           Batteries
         </MenuItem>
+        <MenuItem to="/launches">
+          <HomeIcon />
+          Launches
+        </MenuItem>
         <MenuItem to="/cart">
           <CartIcon />
           Cart

@@ -17,7 +17,6 @@ const typeDefs = gql`
     launch(id: ID!): Launch
     me: BasicUser
     listings: [Battery]
-    sensitiveInformation: String @auth
     authenticatedQuery: String
   }
 

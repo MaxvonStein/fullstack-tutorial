@@ -1,13 +1,16 @@
 import React from 'react';
-import { gql, useMutation } from '@apollo/client';
+import { gql, useApolloClient, useMutation } from '@apollo/client';
 
 import { LoginForm, Loading } from '../components';
+import { RouteComponentProps } from '@reach/router';
 import { isLoggedInVar } from '../cache';
 import { AuthenticateParamsInput } from '../__generated-graphql-codegen__/types'
 // imported seperately to avoid a graphql syntax error inside mutation definition
 import * as GetTypes from '../__generated-graphql-codegen__/types'
 import * as LoginTypes from './__generated__/Login'
 import { AuthenticationService, LoginUserPasswordService } from '@accounts/types';
+
+
 
 export const LOGIN_USER = gql`
   mutation LoginUser($serviceName: String!, $params: AuthenticateParamsInput!) {
@@ -28,14 +31,12 @@ export const LOGIN_USER = gql`
 }
 `;
 
-// export interface LoginUserPasswordService {
-//   user: string | LoginUserIdentity;
-//   password: string;
-//   // 2FA code
-//   code?: string;
-// }
+interface LoginProps extends RouteComponentProps { }
 
-export default function Login() {
+
+const Login: React.FC<LoginProps> = () => {
+  const client = useApolloClient();
+
   const [login, { loading, error }] = useMutation<
     // # find appropriate types here from accounts/types
     // or define
@@ -46,11 +47,11 @@ export default function Login() {
   >(
     LOGIN_USER,
     {
-      onCompleted(authenticate) {
+      onCompleted({ authenticate }) {
         console.log(authenticate)
-        if (authenticate) {
-          console.log(authenticate)
-          // localStorage.setItem('token', login.token as string);
+        if (authenticate && authenticate.tokens) {
+          client.cache.evict({ id: 'ROOT_QUERY', fieldName: 'listings' });
+          localStorage.setItem('token', authenticate.tokens.accessToken as string);
           // localStorage.setItem('userId', login.id as string);
           isLoggedInVar(true);
         }
@@ -63,3 +64,5 @@ export default function Login() {
 
   return <LoginForm login={login} />;
 }
+
+export default Login;

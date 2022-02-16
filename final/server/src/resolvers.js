@@ -30,14 +30,10 @@ module.exports = {
       dataSources.launchAPI.getLaunchById({ launchId: id }),
     me: async (_, __, { dataSources }) =>
       dataSources.userAPI.findOrCreateUser(),
-    listings: (_, __, { dataSources }) => {
-      console.log(dataSources);
+    listings: authenticated((_, __, { dataSources }) => {
       return dataSources.listingAPI.getListings();
-    },
-    sensitiveInformation: () => {
-      return "sensitive information here";
-    },
-    authenticatedQuery: authenticated((root, args, context) => {
+    }),
+    authenticatedQuery: authenticated((root, args, context, info) => {
       return "authenticated information here";
     }),
   },

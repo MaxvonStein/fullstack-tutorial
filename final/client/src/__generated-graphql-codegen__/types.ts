@@ -305,8 +305,6 @@ export type TwoFactorSecretKeyInput = {
   qr_code_hex?: InputMaybe<Scalars['String']>;
 };
 
-export type LaunchTileFragment = { __typename: 'Launch', id: string, isBooked: boolean, rocket?: { __typename?: 'Rocket', id: string, name?: string | null } | null, mission?: { __typename?: 'Mission', name?: string | null, missionPatch?: string | null } | null };
-
 export type CancelMutationVariables = Exact<{
   launchId: Scalars['ID'];
 }>;
@@ -328,6 +326,11 @@ export type GetLaunchQueryVariables = Exact<{
 
 export type GetLaunchQuery = { __typename?: 'Query', launch?: { __typename: 'Launch', id: string, isBooked: boolean, rocket?: { __typename?: 'Rocket', id: string, name?: string | null } | null, mission?: { __typename?: 'Mission', name?: string | null, missionPatch?: string | null } | null } | null };
 
+export type LogoutUserMutationVariables = Exact<{ [key: string]: never; }>;
+
+
+export type LogoutUserMutation = { __typename?: 'Mutation', logout?: boolean | null };
+
 export type IsUserLoggedInQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -336,7 +339,7 @@ export type IsUserLoggedInQuery = { __typename?: 'Query', isLoggedIn: boolean };
 export type GetListingListQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetListingListQuery = { __typename?: 'Query', listings?: Array<{ __typename: 'Battery', make: string, model: string } | null> | null };
+export type GetListingListQuery = { __typename?: 'Query', sensitiveInformation?: string | null, listings?: Array<{ __typename: 'Battery', make: string, model: string } | null> | null };
 
 export type GetCartItemsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -350,17 +353,14 @@ export type LaunchDetailsQueryVariables = Exact<{
 
 export type LaunchDetailsQuery = { __typename?: 'Query', launch?: { __typename: 'Launch', site?: string | null, id: string, isBooked: boolean, rocket?: { __typename?: 'Rocket', type?: string | null, id: string, name?: string | null } | null, mission?: { __typename?: 'Mission', name?: string | null, missionPatch?: string | null } | null } | null };
 
+export type LaunchTileFragment = { __typename: 'Launch', id: string, isBooked: boolean, rocket?: { __typename?: 'Rocket', id: string, name?: string | null } | null, mission?: { __typename?: 'Mission', name?: string | null, missionPatch?: string | null } | null };
+
 export type GetLaunchListQueryVariables = Exact<{
   after?: InputMaybe<Scalars['String']>;
 }>;
 
 
 export type GetLaunchListQuery = { __typename?: 'Query', launches: { __typename?: 'LaunchConnection', cursor: string, hasMore: boolean, launches: Array<{ __typename: 'Launch', id: string, isBooked: boolean, rocket?: { __typename?: 'Rocket', id: string, name?: string | null } | null, mission?: { __typename?: 'Mission', name?: string | null, missionPatch?: string | null } | null } | null> } };
-
-export type GetMyTripsQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type GetMyTripsQuery = { __typename?: 'Query', me?: { __typename?: 'BasicUser', id: string, email: string, trips: Array<{ __typename: 'Launch', id: string, isBooked: boolean, rocket?: { __typename?: 'Rocket', id: string, name?: string | null } | null, mission?: { __typename?: 'Mission', name?: string | null, missionPatch?: string | null } | null } | null> } | null };
 
 export type LoginUserMutationVariables = Exact<{
   serviceName: Scalars['String'];
@@ -369,6 +369,11 @@ export type LoginUserMutationVariables = Exact<{
 
 
 export type LoginUserMutation = { __typename?: 'Mutation', authenticate?: { __typename?: 'LoginResult', sessionId?: string | null, tokens?: { __typename?: 'Tokens', refreshToken?: string | null, accessToken?: string | null } | null, user?: { __typename?: 'User', username?: string | null, emails?: Array<{ __typename?: 'EmailRecord', address?: string | null, verified?: boolean | null }> | null } | null } | null };
+
+export type GetMyTripsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetMyTripsQuery = { __typename?: 'Query', me?: { __typename?: 'BasicUser', id: string, email: string, trips: Array<{ __typename: 'Launch', id: string, isBooked: boolean, rocket?: { __typename?: 'Rocket', id: string, name?: string | null } | null, mission?: { __typename?: 'Mission', name?: string | null, missionPatch?: string | null } | null } | null> } | null };
 
 export const LaunchTileFragmentDoc = gql`
     fragment LaunchTile on Launch {
@@ -496,6 +501,36 @@ export function useGetLaunchLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<
 export type GetLaunchQueryHookResult = ReturnType<typeof useGetLaunchQuery>;
 export type GetLaunchLazyQueryHookResult = ReturnType<typeof useGetLaunchLazyQuery>;
 export type GetLaunchQueryResult = Apollo.QueryResult<GetLaunchQuery, GetLaunchQueryVariables>;
+export const LogoutUserDocument = gql`
+    mutation LogoutUser {
+  logout
+}
+    `;
+export type LogoutUserMutationFn = Apollo.MutationFunction<LogoutUserMutation, LogoutUserMutationVariables>;
+
+/**
+ * __useLogoutUserMutation__
+ *
+ * To run a mutation, you first call `useLogoutUserMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useLogoutUserMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [logoutUserMutation, { data, loading, error }] = useLogoutUserMutation({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useLogoutUserMutation(baseOptions?: Apollo.MutationHookOptions<LogoutUserMutation, LogoutUserMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<LogoutUserMutation, LogoutUserMutationVariables>(LogoutUserDocument, options);
+      }
+export type LogoutUserMutationHookResult = ReturnType<typeof useLogoutUserMutation>;
+export type LogoutUserMutationResult = Apollo.MutationResult<LogoutUserMutation>;
+export type LogoutUserMutationOptions = Apollo.BaseMutationOptions<LogoutUserMutation, LogoutUserMutationVariables>;
 export const IsUserLoggedInDocument = gql`
     query IsUserLoggedIn {
   isLoggedIn @client
@@ -535,6 +570,7 @@ export const GetListingListDocument = gql`
     make
     model
   }
+  sensitiveInformation
 }
     `;
 
@@ -674,44 +710,6 @@ export function useGetLaunchListLazyQuery(baseOptions?: Apollo.LazyQueryHookOpti
 export type GetLaunchListQueryHookResult = ReturnType<typeof useGetLaunchListQuery>;
 export type GetLaunchListLazyQueryHookResult = ReturnType<typeof useGetLaunchListLazyQuery>;
 export type GetLaunchListQueryResult = Apollo.QueryResult<GetLaunchListQuery, GetLaunchListQueryVariables>;
-export const GetMyTripsDocument = gql`
-    query GetMyTrips {
-  me {
-    id
-    email
-    trips {
-      ...LaunchTile
-    }
-  }
-}
-    ${LaunchTileFragmentDoc}`;
-
-/**
- * __useGetMyTripsQuery__
- *
- * To run a query within a React component, call `useGetMyTripsQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetMyTripsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetMyTripsQuery({
- *   variables: {
- *   },
- * });
- */
-export function useGetMyTripsQuery(baseOptions?: Apollo.QueryHookOptions<GetMyTripsQuery, GetMyTripsQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetMyTripsQuery, GetMyTripsQueryVariables>(GetMyTripsDocument, options);
-      }
-export function useGetMyTripsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetMyTripsQuery, GetMyTripsQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetMyTripsQuery, GetMyTripsQueryVariables>(GetMyTripsDocument, options);
-        }
-export type GetMyTripsQueryHookResult = ReturnType<typeof useGetMyTripsQuery>;
-export type GetMyTripsLazyQueryHookResult = ReturnType<typeof useGetMyTripsLazyQuery>;
-export type GetMyTripsQueryResult = Apollo.QueryResult<GetMyTripsQuery, GetMyTripsQueryVariables>;
 export const LoginUserDocument = gql`
     mutation LoginUser($serviceName: String!, $params: AuthenticateParamsInput!) {
   authenticate(serviceName: $serviceName, params: $params) {
@@ -757,3 +755,41 @@ export function useLoginUserMutation(baseOptions?: Apollo.MutationHookOptions<Lo
 export type LoginUserMutationHookResult = ReturnType<typeof useLoginUserMutation>;
 export type LoginUserMutationResult = Apollo.MutationResult<LoginUserMutation>;
 export type LoginUserMutationOptions = Apollo.BaseMutationOptions<LoginUserMutation, LoginUserMutationVariables>;
+export const GetMyTripsDocument = gql`
+    query GetMyTrips {
+  me {
+    id
+    email
+    trips {
+      ...LaunchTile
+    }
+  }
+}
+    ${LaunchTileFragmentDoc}`;
+
+/**
+ * __useGetMyTripsQuery__
+ *
+ * To run a query within a React component, call `useGetMyTripsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetMyTripsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetMyTripsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetMyTripsQuery(baseOptions?: Apollo.QueryHookOptions<GetMyTripsQuery, GetMyTripsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetMyTripsQuery, GetMyTripsQueryVariables>(GetMyTripsDocument, options);
+      }
+export function useGetMyTripsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetMyTripsQuery, GetMyTripsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetMyTripsQuery, GetMyTripsQueryVariables>(GetMyTripsDocument, options);
+        }
+export type GetMyTripsQueryHookResult = ReturnType<typeof useGetMyTripsQuery>;
+export type GetMyTripsLazyQueryHookResult = ReturnType<typeof useGetMyTripsLazyQuery>;
+export type GetMyTripsQueryResult = Apollo.QueryResult<GetMyTripsQuery, GetMyTripsQueryVariables>;

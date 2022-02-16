@@ -37,7 +37,8 @@ const Batteries: React.FC<LaunchesProps> = () => {
     loading,
     error,
     fetchMore
-  } = useQuery<GetTypes.GetListingListQuery>(GET_LISTINGS);
+  } = useQuery<GetTypes.GetListingListQuery>(GET_LISTINGS, {
+  });
   // typing the parameters, no variables used at the moment
   // fetcMore is a built-in function to aid in paination
   const [isLoadingMore, setIsLoadingMore] = useState(false);
