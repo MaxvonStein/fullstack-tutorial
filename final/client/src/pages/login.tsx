@@ -10,8 +10,6 @@ import * as GetTypes from '../__generated-graphql-codegen__/types'
 import * as LoginTypes from './__generated__/Login'
 import { AuthenticationService, LoginUserPasswordService } from '@accounts/types';
 
-
-
 export const LOGIN_USER = gql`
   mutation LoginUser($serviceName: String!, $params: AuthenticateParamsInput!) {
   authenticate(serviceName: $serviceName, params: $params) {
@@ -47,6 +45,7 @@ const Login: React.FC<LoginProps> = () => {
   >(
     LOGIN_USER,
     {
+      fetchPolicy: "no-cache",
       onCompleted({ authenticate }) {
         console.log(authenticate)
         if (authenticate && authenticate.tokens) {

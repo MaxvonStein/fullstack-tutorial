@@ -45,17 +45,18 @@ const LogoutButton: React.FC<LogoutButtonProps> = () => {
         // query in `profile.tsx`. Then trigger garbage collection using
         // `cache.gc()` to remove the cached `User` object that is no longer
         // reachable.
-        client.cache.evict({ fieldName: 'me' });
+        // client.cache.evict({ fieldName: 'me' });
         client.cache.evict({ id: 'ROOT_QUERY', fieldName: 'listings' });
+        // don't send the user to a page where the query's not authorized - causes empty results in cache
         client.cache.gc();
         // console.log(localStorage.getItem('token'))
 
-        logout();
 
         // Remove user details from localStorage.
         localStorage.removeItem('token');
         localStorage.removeItem('userId');
 
+        logout();
         // Let other parts of the application that are relying on logged in
         // state know we're now logged out.
         // isLoggedInVar(false);
