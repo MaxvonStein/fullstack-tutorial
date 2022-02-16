@@ -1,4 +1,6 @@
 const { paginateResults } = require("./utils");
+const AccountsServer = require("@accounts/server");
+const { authenticated } = require("@accounts/graphql-api");
 
 module.exports = {
   Query: {
@@ -28,10 +30,12 @@ module.exports = {
       dataSources.launchAPI.getLaunchById({ launchId: id }),
     me: async (_, __, { dataSources }) =>
       dataSources.userAPI.findOrCreateUser(),
-    listings: (_, __, { dataSources }) => {
-      console.log(dataSources);
+    listings: authenticated((_, __, { dataSources }) => {
       return dataSources.listingAPI.getListings();
-    },
+    }),
+    authenticatedQuery: authenticated((root, args, context, info) => {
+      return "authenticated information here";
+    }),
   },
   Mutation: {
     bookTrips: async (_, { launchIds }, { dataSources }) => {
@@ -67,7 +71,7 @@ module.exports = {
         launches: [launch],
       };
     },
-    login: async (_, { email }, { dataSources }) => {
+    basicLogin: async (_, { email }, { dataSources }) => {
       const user = await dataSources.userAPI.findOrCreateUser({ email });
       if (user) {
         user.token = Buffer.from(email).toString("base64");
@@ -87,7 +91,7 @@ module.exports = {
         : mission.missionPatchLarge;
     },
   },
-  User: {
+  BasicUser: {
     trips: async (_, __, { dataSources }) => {
       // get ids of launches by user
       const launchIds = await dataSources.userAPI.getLaunchIdsByUser();

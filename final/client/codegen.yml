@@ -1,17 +1,17 @@
 overwrite: true
 schema:
   - "./src/index.tsx"
-  - "C:\\Users\\mevon\\Documents\\React\\apollo\\fullstack-tutorial-update-v3\\fullstack-tutorial\\final\\server\\src\\schema.js"
+  - "http://localhost:4000/graphql"
 documents:
   - "./src/**/*.tsx"
-  - "!./src/__generated-graphql-codegen__/types.gql"
-  # do a sweep for other .tsx files that should be removed, eg. schema and resolvers
+  - "!./src/__generated-graphql-codegen__/types.ts"
 generates:
-  src/__generated-graphql-codegen__/graphql.tsx:
+  src/__generated-graphql-codegen__/types.ts:
     plugins:
       - "typescript"
       - "typescript-operations"
       - "typescript-react-apollo"
   ./graphql.schema.json:
     plugins:
+      # why do we need this?
       - "introspection"

@@ -1,6 +1,6 @@
 import React from 'react';
 import { unit } from '../styles';
-import * as GetTypes from '../__generated-graphql-codegen__/graphql'
+import * as GetTypes from '../__generated-graphql-codegen__/types'
 import Link from "@mui/material/Link"
 import Box from "@mui/material/Box"
 

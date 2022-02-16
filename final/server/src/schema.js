@@ -1,6 +1,8 @@
 const { gql } = require("apollo-server");
 
+// source (directive): https://www.accountsjs.com/docs/getting-started/
 const typeDefs = gql`
+  directive @auth on FIELD_DEFINITION | OBJECT
   type Query {
     launches(
       """
@@ -13,8 +15,9 @@ const typeDefs = gql`
       after: String
     ): LaunchConnection!
     launch(id: ID!): Launch
-    me: User
+    me: BasicUser
     listings: [Battery]
+    authenticatedQuery: String
   }
 
   type Mutation {
@@ -24,7 +27,8 @@ const typeDefs = gql`
     # if false, cancellation failed -- check errors
     cancelTrip(launchId: ID!): TripUpdateResponse!
 
-    login(email: String): User
+    # basic login example using only an email
+    basicLogin(email: String): BasicUser
   }
 
   type TripUpdateResponse {
@@ -58,7 +62,7 @@ const typeDefs = gql`
     type: String
   }
 
-  type User {
+  type BasicUser {
     id: ID!
     email: String!
     profileImage: String

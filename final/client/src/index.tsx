@@ -2,6 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import {
   ApolloClient,
+  createHttpLink,
+  InMemoryCache,
   NormalizedCacheObject,
   ApolloProvider,
   gql,
@@ -12,6 +14,8 @@ import Pages from './pages';
 import Login from './pages/login';
 import injectStyles from './styles';
 import { cache } from './cache';
+import { setContext } from '@apollo/client/link/context';
+
 // import typeDefs from './schema';
 // const typeDefs = require('./schema');
 
@@ -23,15 +27,37 @@ export const typeDefs = gql`
     cartItems: [ID!]!
   }
 `;
+
+// source: https://www.apollographql.com/docs/react/networking/authentication/
+const httpLink = createHttpLink({
+  uri: 'http://localhost:4000/graphql',
+});
+
+const authLink = setContext((_, { headers }) => {
+  // get the authentication token from local storage if it exists
+  const token = localStorage.getItem('token');
+  // return the headers to the context so httpLink can read them
+  console.log(token)
+  return {
+    headers: {
+      ...headers,
+      authorization: token ? `Bearer ${token}` : "",
+    }
+  }
+});
+
 // update to pull from local file for codegen
 
 // Set up our apollo-client to point at the server we created
 // this can be local or a remote endpoint
 // typed to a functoin call with a typed parameter
 const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
+  link: authLink.concat(httpLink),
   cache,
   uri: 'http://localhost:4000/graphql',
   headers: {
+    // # need to update to the new authorization model
+    // believe there is a problem here where network requests are sent with the old authorization - client doesn't get rebuilt when user logs out
     authorization: localStorage.getItem('token') || '',
     'client-name': 'Space Explorer [web]',
     'client-version': '1.0.0',

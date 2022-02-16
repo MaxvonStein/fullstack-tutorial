@@ -7,6 +7,7 @@ import Cart from './cart';
 import Profile from './profile';
 import Batteries from './batteries';
 import { Footer, PageContainer } from '../components';
+import Login from './login';
 
 export default function Pages() {
   return (
@@ -14,10 +15,13 @@ export default function Pages() {
       <PageContainer>
         <Router primary={false} component={Fragment}>
           <Batteries path="/batteries" />
-          <Launches path="/" />
+          <Login path="/login" />
+          <Launches path="/launches" />
           <Launch path="launch/:launchId" />
           <Cart path="cart" />
           <Profile path="profile" />
+          <Batteries path="/" />
+
         </Router>
       </PageContainer>
       <Footer />

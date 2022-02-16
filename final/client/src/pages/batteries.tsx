@@ -3,7 +3,7 @@ import { gql, useQuery } from '@apollo/client';
 
 import { LaunchTile, Header, Button, Loading } from '../components';
 import { RouteComponentProps } from '@reach/router';
-import * as GetTypes from '../__generated-graphql-codegen__/graphql'
+import * as GetTypes from '../__generated-graphql-codegen__/types'
 import Link from '@mui/material/Link'
 import Stack from '@mui/material/Stack';
 import BatteryItem from '../components/battery-item';
@@ -37,7 +37,8 @@ const Batteries: React.FC<LaunchesProps> = () => {
     loading,
     error,
     fetchMore
-  } = useQuery<GetTypes.GetListingListQuery>(GET_LISTINGS);
+  } = useQuery<GetTypes.GetListingListQuery>(GET_LISTINGS, {
+  });
   // typing the parameters, no variables used at the moment
   // fetcMore is a built-in function to aid in paination
   const [isLoadingMore, setIsLoadingMore] = useState(false);
