@@ -25,7 +25,6 @@ export type Query = {
   launches: LaunchConnection;
   listings?: Maybe<Array<Maybe<Battery>>>;
   me?: Maybe<BasicUser>;
-  sensitiveInformation?: Maybe<Scalars['String']>;
   twoFactorSecret?: Maybe<TwoFactorSecretKey>;
 };
 
@@ -99,9 +98,26 @@ export type LaunchConnection = {
 
 export type Battery = {
   __typename?: 'Battery';
-  generation: Scalars['String'];
+  dealer?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
+  distance?: Maybe<Scalars['Int']>;
+  generationEnd?: Maybe<Scalars['String']>;
+  generationStart?: Maybe<Scalars['String']>;
+  imageSrc?: Maybe<Scalars['String']>;
+  isComplete?: Maybe<Scalars['Boolean']>;
+  isCore?: Maybe<Scalars['Boolean']>;
+  isNoShip?: Maybe<Scalars['Boolean']>;
+  isReman?: Maybe<Scalars['Boolean']>;
+  isShippingAvailable?: Maybe<Scalars['Boolean']>;
+  isWarrantied?: Maybe<Scalars['Boolean']>;
   make: Scalars['String'];
   model: Scalars['String'];
+  odometerThousands?: Maybe<Scalars['Int']>;
+  partGrade?: Maybe<Scalars['String']>;
+  price?: Maybe<Scalars['Int']>;
+  sellerType?: Maybe<Scalars['String']>;
+  subModel?: Maybe<Scalars['String']>;
+  year?: Maybe<Scalars['String']>;
 };
 
 export type BasicUser = {
@@ -339,7 +355,7 @@ export type IsUserLoggedInQuery = { __typename?: 'Query', isLoggedIn: boolean };
 export type GetListingListQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetListingListQuery = { __typename?: 'Query', sensitiveInformation?: string | null, listings?: Array<{ __typename: 'Battery', make: string, model: string } | null> | null };
+export type GetListingListQuery = { __typename?: 'Query', listings?: Array<{ __typename: 'Battery', make: string, model: string } | null> | null };
 
 export type GetCartItemsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -570,7 +586,6 @@ export const GetListingListDocument = gql`
     make
     model
   }
-  sensitiveInformation
 }
     `;
 

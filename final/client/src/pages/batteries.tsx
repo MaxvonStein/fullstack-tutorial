@@ -15,6 +15,25 @@ export const GET_LISTINGS = gql`
       __typename
       make
       model
+      imageSrc
+      isComplete
+      year
+      subModel
+      generationStart
+      generationEnd
+      description
+      partGrade
+      dealer
+      distance
+      price
+      isReman
+      isCore
+      isNoShip
+      isShippingAvailable
+      sellerType
+      isWarrantied
+      odometerThousands
+      isComplete
     }
   }
 `;
@@ -44,7 +63,7 @@ const Batteries: React.FC<LaunchesProps> = () => {
   const [isLoadingMore, setIsLoadingMore] = useState(false);
 
   if (loading) return <Loading />;
-  if (error || !data) return <p>ERROR</p>;
+  if (error || !data) return <p>`ERROR: ${error?.message}`</p>;
 
   return (
     <Fragment>

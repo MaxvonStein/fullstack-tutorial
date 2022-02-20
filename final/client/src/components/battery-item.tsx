@@ -10,10 +10,17 @@ interface BatteryItemProps {
 }
 
 const BatteryItem: React.FC<BatteryItemProps> = ({ battery }) => {
-  const { make, model, generation } = battery;
+  const { make, model } = battery;
   return (
-    <Box>
-      <Link>{battery.make} {battery.model}</Link>
+    <Box sx={{ display: 'grid', gridAutoColumns: '1fr' }}>
+      <Box sx={{ gridRow: '1' }}>
+        <img src={battery.imageSrc ? battery.imageSrc : ""}></img>
+      </Box>
+      <Box sx={{ gridRow: '1' }}>
+        <Box sx={{ typography: 'body1' }}>{`${make} ${model}`}</Box>
+        <Box sx={{ typography: 'body2' }}>{battery.isComplete ? 'Complete pack' : 'Not Complete'}</Box>
+        <Box sx={{ typography: 'body2' }}>{`$${battery.price}`}</Box>
+      </Box>
     </Box>
   );
 }

@@ -23,7 +23,7 @@ interface HeaderProps {
   children?: any;
 }
 
-const Header: React.FC<HeaderProps> = ({ image, children = 'Space Explorer' }) => {
+const Header: React.FC<HeaderProps> = ({ image, children = 'Battery Marketplace' }) => {
   // const email = atob(localStorage.getItem('token') as string);
   // new accounts strategy causes error The string to be decoded is not correctly encoded
   // const avatar = image || pickAvatarByEmail(email);
