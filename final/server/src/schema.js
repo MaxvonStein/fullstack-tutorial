@@ -78,7 +78,24 @@ const typeDefs = gql`
   type Battery {
     make: String!
     model: String!
-    generation: String!
+    year: String
+    subModel: String
+    generationStart: String
+    generationEnd: String
+    imageSrc: String
+    description: String
+    partGrade: String
+    dealer: String
+    distance: Int
+    price: Int
+    isReman: Boolean
+    isCore: Boolean
+    isNoShip: Boolean
+    isShippingAvailable: Boolean
+    sellerType: String
+    isWarrantied: Boolean
+    odometerThousands: Int
+    isComplete: Boolean
   }
 
   enum PatchSize {

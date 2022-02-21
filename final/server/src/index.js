@@ -134,7 +134,7 @@ MongoClient.connect(
       context: accountsGraphQL.context,
       dataSources: () => {
         return {
-          listingAPI: new ListingAPI(db.collection("listings")),
+          listingAPI: new ListingAPI(db.collection("collection_new")),
         };
       },
     });
