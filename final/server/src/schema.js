@@ -17,6 +17,7 @@ const typeDefs = gql`
     launch(id: ID!): Launch
     me: BasicUser
     listings: [Battery]
+    filteredListings(batteryFilter: BatteryFilter): [Battery]
     authenticatedQuery: String
   }
 
@@ -96,6 +97,10 @@ const typeDefs = gql`
     isWarrantied: Boolean
     odometerThousands: Int
     isComplete: Boolean
+  }
+
+  input BatteryFilter {
+    model: [String]
   }
 
   enum PatchSize {

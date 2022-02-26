@@ -34,6 +34,17 @@ module.exports = {
     //   return dataSources.listingAPI.getListings();
     // }),
     listings: (_, __, { dataSources }) => dataSources.listingAPI.getListings(),
+    filteredListings: (_, { batteryFilter }, { dataSources }) => {
+      const findQuery = Object.keys(batteryFilter).reduce((previous, key) => {
+        if (batteryFilter[key].length != 0) {
+          previous[key] = batteryFilter[key];
+          console.log(previous);
+        }
+        return previous;
+      }, {});
+
+      return dataSources.listingAPI.getFilteredListings(findQuery);
+    },
     authenticatedQuery: authenticated((root, args, context, info) => {
       return "authenticated information here";
     }),

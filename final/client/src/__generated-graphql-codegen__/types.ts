@@ -19,13 +19,20 @@ export type Query = {
   __typename?: 'Query';
   authenticatedQuery?: Maybe<Scalars['String']>;
   cartItems: Array<Scalars['ID']>;
+  filteredListings?: Maybe<Array<Maybe<Battery>>>;
   getUser?: Maybe<User>;
   isLoggedIn: Scalars['Boolean'];
   launch?: Maybe<Launch>;
   launches: LaunchConnection;
+  listingFilter: ListingFilter;
   listings?: Maybe<Array<Maybe<Battery>>>;
   me?: Maybe<BasicUser>;
   twoFactorSecret?: Maybe<TwoFactorSecretKey>;
+};
+
+
+export type QueryFilteredListingsArgs = {
+  batteryFilter?: InputMaybe<BatteryFilter>;
 };
 
 
@@ -37,6 +44,34 @@ export type QueryLaunchArgs = {
 export type QueryLaunchesArgs = {
   after?: InputMaybe<Scalars['String']>;
   pageSize?: InputMaybe<Scalars['Int']>;
+};
+
+export type BatteryFilter = {
+  model: Array<InputMaybe<Scalars['String']>>;
+};
+
+export type Battery = {
+  __typename?: 'Battery';
+  dealer?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
+  distance?: Maybe<Scalars['Int']>;
+  generationEnd?: Maybe<Scalars['String']>;
+  generationStart?: Maybe<Scalars['String']>;
+  imageSrc?: Maybe<Scalars['String']>;
+  isComplete?: Maybe<Scalars['Boolean']>;
+  isCore?: Maybe<Scalars['Boolean']>;
+  isNoShip?: Maybe<Scalars['Boolean']>;
+  isReman?: Maybe<Scalars['Boolean']>;
+  isShippingAvailable?: Maybe<Scalars['Boolean']>;
+  isWarrantied?: Maybe<Scalars['Boolean']>;
+  make: Scalars['String'];
+  model: Scalars['String'];
+  odometerThousands?: Maybe<Scalars['Int']>;
+  partGrade?: Maybe<Scalars['String']>;
+  price?: Maybe<Scalars['Int']>;
+  sellerType?: Maybe<Scalars['String']>;
+  subModel?: Maybe<Scalars['String']>;
+  year?: Maybe<Scalars['String']>;
 };
 
 export type User = {
@@ -96,28 +131,9 @@ export type LaunchConnection = {
   launches: Array<Maybe<Launch>>;
 };
 
-export type Battery = {
-  __typename?: 'Battery';
-  dealer?: Maybe<Scalars['String']>;
-  description?: Maybe<Scalars['String']>;
-  distance?: Maybe<Scalars['Int']>;
-  generationEnd?: Maybe<Scalars['String']>;
-  generationStart?: Maybe<Scalars['String']>;
-  imageSrc?: Maybe<Scalars['String']>;
-  isComplete?: Maybe<Scalars['Boolean']>;
-  isCore?: Maybe<Scalars['Boolean']>;
-  isNoShip?: Maybe<Scalars['Boolean']>;
-  isReman?: Maybe<Scalars['Boolean']>;
-  isShippingAvailable?: Maybe<Scalars['Boolean']>;
-  isWarrantied?: Maybe<Scalars['Boolean']>;
-  make: Scalars['String'];
-  model: Scalars['String'];
-  odometerThousands?: Maybe<Scalars['Int']>;
-  partGrade?: Maybe<Scalars['String']>;
-  price?: Maybe<Scalars['Int']>;
-  sellerType?: Maybe<Scalars['String']>;
-  subModel?: Maybe<Scalars['String']>;
-  year?: Maybe<Scalars['String']>;
+export type ListingFilter = {
+  __typename?: 'ListingFilter';
+  model: Array<Maybe<Scalars['String']>>;
 };
 
 export type BasicUser = {
@@ -352,10 +368,12 @@ export type IsUserLoggedInQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type IsUserLoggedInQuery = { __typename?: 'Query', isLoggedIn: boolean };
 
-export type GetListingListQueryVariables = Exact<{ [key: string]: never; }>;
+export type GetListingListQueryVariables = Exact<{
+  batteryFilter?: InputMaybe<BatteryFilter>;
+}>;
 
 
-export type GetListingListQuery = { __typename?: 'Query', listings?: Array<{ __typename: 'Battery', make: string, model: string } | null> | null };
+export type GetListingListQuery = { __typename?: 'Query', listingFilter: { __typename?: 'ListingFilter', model: Array<string | null> }, filteredListings?: Array<{ __typename: 'Battery', make: string, model: string, imageSrc?: string | null, isComplete?: boolean | null, year?: string | null, subModel?: string | null, generationStart?: string | null, generationEnd?: string | null, description?: string | null, partGrade?: string | null, dealer?: string | null, distance?: number | null, price?: number | null, isReman?: boolean | null, isCore?: boolean | null, isNoShip?: boolean | null, isShippingAvailable?: boolean | null, sellerType?: string | null, isWarrantied?: boolean | null, odometerThousands?: number | null } | null> | null };
 
 export type GetCartItemsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -580,11 +598,33 @@ export type IsUserLoggedInQueryHookResult = ReturnType<typeof useIsUserLoggedInQ
 export type IsUserLoggedInLazyQueryHookResult = ReturnType<typeof useIsUserLoggedInLazyQuery>;
 export type IsUserLoggedInQueryResult = Apollo.QueryResult<IsUserLoggedInQuery, IsUserLoggedInQueryVariables>;
 export const GetListingListDocument = gql`
-    query GetListingList {
-  listings {
+    query GetListingList($batteryFilter: BatteryFilter) {
+  listingFilter @client {
+    model
+  }
+  filteredListings(batteryFilter: $batteryFilter) {
     __typename
     make
     model
+    imageSrc
+    isComplete
+    year
+    subModel
+    generationStart
+    generationEnd
+    description
+    partGrade
+    dealer
+    distance
+    price
+    isReman
+    isCore
+    isNoShip
+    isShippingAvailable
+    sellerType
+    isWarrantied
+    odometerThousands
+    isComplete
   }
 }
     `;
@@ -601,6 +641,7 @@ export const GetListingListDocument = gql`
  * @example
  * const { data, loading, error } = useGetListingListQuery({
  *   variables: {
+ *      batteryFilter: // value for 'batteryFilter'
  *   },
  * });
  */

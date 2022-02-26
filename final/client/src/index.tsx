@@ -21,11 +21,16 @@ import { setContext } from '@apollo/client/link/context';
 
 
 // client-side schema
+
+
 export const typeDefs = gql`
   extend type Query {
     isLoggedIn: Boolean!
     cartItems: [ID!]!
+    listingFilter: ListingFilter!
   }
+
+  type ListingFilter {model: [String]!}
 `;
 
 // source: https://www.apollographql.com/docs/react/networking/authentication/

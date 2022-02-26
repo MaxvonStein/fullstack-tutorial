@@ -3,7 +3,7 @@ import styled from 'react-emotion';
 
 import { unit, colors } from '../styles';
 
-export default function PageContainer (props: any) {
+export default function PageContainer(props: any) {
   return (
     <Fragment>
       <Bar />
@@ -27,7 +27,7 @@ const Container = styled('div')({
   flexDirection: 'column',
   flexGrow: 1,
   width: '100%',
-  maxWidth: 600,
+  maxWidth: 1200,
   margin: '0 auto',
   padding: unit * 3,
   paddingBottom: unit * 5,
