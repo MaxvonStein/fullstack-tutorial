@@ -47,7 +47,7 @@ export type QueryLaunchesArgs = {
 };
 
 export type BatteryFilter = {
-  model: Array<InputMaybe<Scalars['String']>>;
+  model?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
 };
 
 export type Battery = {
@@ -368,12 +368,17 @@ export type IsUserLoggedInQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type IsUserLoggedInQuery = { __typename?: 'Query', isLoggedIn: boolean };
 
-export type GetListingListQueryVariables = Exact<{
+export type GetListingListQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetListingListQuery = { __typename?: 'Query', listingFilter: { __typename?: 'ListingFilter', model: Array<string | null> }, listings?: Array<{ __typename: 'Battery', make: string, model: string, imageSrc?: string | null, isComplete?: boolean | null, year?: string | null, subModel?: string | null, generationStart?: string | null, generationEnd?: string | null, description?: string | null, partGrade?: string | null, dealer?: string | null, distance?: number | null, price?: number | null, isReman?: boolean | null, isCore?: boolean | null, isNoShip?: boolean | null, isShippingAvailable?: boolean | null, sellerType?: string | null, isWarrantied?: boolean | null, odometerThousands?: number | null } | null> | null };
+
+export type GetFilteredListingsQueryVariables = Exact<{
   batteryFilter?: InputMaybe<BatteryFilter>;
 }>;
 
 
-export type GetListingListQuery = { __typename?: 'Query', listingFilter: { __typename?: 'ListingFilter', model: Array<string | null> }, filteredListings?: Array<{ __typename: 'Battery', make: string, model: string, imageSrc?: string | null, isComplete?: boolean | null, year?: string | null, subModel?: string | null, generationStart?: string | null, generationEnd?: string | null, description?: string | null, partGrade?: string | null, dealer?: string | null, distance?: number | null, price?: number | null, isReman?: boolean | null, isCore?: boolean | null, isNoShip?: boolean | null, isShippingAvailable?: boolean | null, sellerType?: string | null, isWarrantied?: boolean | null, odometerThousands?: number | null } | null> | null };
+export type GetFilteredListingsQuery = { __typename?: 'Query', listingFilter: { __typename?: 'ListingFilter', model: Array<string | null> }, filteredListings?: Array<{ __typename: 'Battery', make: string, model: string, imageSrc?: string | null, isComplete?: boolean | null, year?: string | null, subModel?: string | null, generationStart?: string | null, generationEnd?: string | null, description?: string | null, partGrade?: string | null, dealer?: string | null, distance?: number | null, price?: number | null, isReman?: boolean | null, isCore?: boolean | null, isNoShip?: boolean | null, isShippingAvailable?: boolean | null, sellerType?: string | null, isWarrantied?: boolean | null, odometerThousands?: number | null } | null> | null };
 
 export type GetCartItemsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -598,11 +603,11 @@ export type IsUserLoggedInQueryHookResult = ReturnType<typeof useIsUserLoggedInQ
 export type IsUserLoggedInLazyQueryHookResult = ReturnType<typeof useIsUserLoggedInLazyQuery>;
 export type IsUserLoggedInQueryResult = Apollo.QueryResult<IsUserLoggedInQuery, IsUserLoggedInQueryVariables>;
 export const GetListingListDocument = gql`
-    query GetListingList($batteryFilter: BatteryFilter) {
+    query GetListingList {
   listingFilter @client {
     model
   }
-  filteredListings(batteryFilter: $batteryFilter) {
+  listings {
     __typename
     make
     model
@@ -641,7 +646,6 @@ export const GetListingListDocument = gql`
  * @example
  * const { data, loading, error } = useGetListingListQuery({
  *   variables: {
- *      batteryFilter: // value for 'batteryFilter'
  *   },
  * });
  */
@@ -656,6 +660,65 @@ export function useGetListingListLazyQuery(baseOptions?: Apollo.LazyQueryHookOpt
 export type GetListingListQueryHookResult = ReturnType<typeof useGetListingListQuery>;
 export type GetListingListLazyQueryHookResult = ReturnType<typeof useGetListingListLazyQuery>;
 export type GetListingListQueryResult = Apollo.QueryResult<GetListingListQuery, GetListingListQueryVariables>;
+export const GetFilteredListingsDocument = gql`
+    query GetFilteredListings($batteryFilter: BatteryFilter) {
+  listingFilter @client @export(as: "batteryFilter") {
+    model
+  }
+  filteredListings(batteryFilter: $batteryFilter) {
+    __typename
+    make
+    model
+    imageSrc
+    isComplete
+    year
+    subModel
+    generationStart
+    generationEnd
+    description
+    partGrade
+    dealer
+    distance
+    price
+    isReman
+    isCore
+    isNoShip
+    isShippingAvailable
+    sellerType
+    isWarrantied
+    odometerThousands
+    isComplete
+  }
+}
+    `;
+
+/**
+ * __useGetFilteredListingsQuery__
+ *
+ * To run a query within a React component, call `useGetFilteredListingsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetFilteredListingsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetFilteredListingsQuery({
+ *   variables: {
+ *      batteryFilter: // value for 'batteryFilter'
+ *   },
+ * });
+ */
+export function useGetFilteredListingsQuery(baseOptions?: Apollo.QueryHookOptions<GetFilteredListingsQuery, GetFilteredListingsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetFilteredListingsQuery, GetFilteredListingsQueryVariables>(GetFilteredListingsDocument, options);
+      }
+export function useGetFilteredListingsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetFilteredListingsQuery, GetFilteredListingsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetFilteredListingsQuery, GetFilteredListingsQueryVariables>(GetFilteredListingsDocument, options);
+        }
+export type GetFilteredListingsQueryHookResult = ReturnType<typeof useGetFilteredListingsQuery>;
+export type GetFilteredListingsLazyQueryHookResult = ReturnType<typeof useGetFilteredListingsLazyQuery>;
+export type GetFilteredListingsQueryResult = Apollo.QueryResult<GetFilteredListingsQuery, GetFilteredListingsQueryVariables>;
 export const GetCartItemsDocument = gql`
     query GetCartItems {
   cartItems @client

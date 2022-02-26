@@ -35,10 +35,10 @@ module.exports = {
     // }),
     listings: (_, __, { dataSources }) => dataSources.listingAPI.getListings(),
     filteredListings: (_, { batteryFilter }, { dataSources }) => {
+      // remove empty fields from batteryFilter to create a valid findQuery to pass to the API
       const findQuery = Object.keys(batteryFilter).reduce((previous, key) => {
         if (batteryFilter[key].length != 0) {
           previous[key] = batteryFilter[key];
-          console.log(previous);
         }
         return previous;
       }, {});

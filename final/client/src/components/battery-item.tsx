@@ -24,7 +24,6 @@ const currentYear = currentDate.getFullYear()
 
 const BatteryItem: React.FC<BatteryItemProps> = ({ battery }) => {
   const { make, model } = battery;
-  console.log(battery.odometerThousands)
   return (
     <Paper sx={{ p: 2 }}>
       <Grid container spacing={2}>
