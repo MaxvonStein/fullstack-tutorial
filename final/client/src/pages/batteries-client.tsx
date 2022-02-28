@@ -11,6 +11,7 @@ import BatteryItem from '../components/battery-item';
 import { Grid } from '@mui/material';
 import ModelFilter from '../components/model-filter';
 import { listingFilterVar } from '../cache';
+import { makeModels, MakeModels } from '../utils/constants'
 // import typeDefs from '../index'
 
 export const GET_LISTINGS = gql`
@@ -70,7 +71,12 @@ const BatteriesClient: React.FC<BatteriesProps> = () => {
       <Header />
       <Grid container>
         <Grid item lg={3}>
-          <ModelFilter make="Toyota" models={["Prius", "Camry"]} />
+          {
+            Object.keys(makeModels).map((makeKey: string) =>
+              <ModelFilter make={makeKey} models={(makeModels as MakeModels)[makeKey].map(({ model }) => model)} />
+            )
+          }
+          {/* <ModelFilter make="Toyota" models={["Prius", "Camry"]} /> */}
         </Grid>
         <Grid item lg={9}>
           {/* what about a sort child component here that would take filteredBatteries and deal with sorting only, no queries */}

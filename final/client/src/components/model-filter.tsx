@@ -20,6 +20,10 @@ const ModelFilter: React.FC<ModelFilterProps> = ({ make, models }) => {
     listingFilterVar({ ...listingFilterVar(), model: event.target.checked ? [...listingFilterVar().model, model] : [...listingFilterVar().model.filter(m => m != model)] })
   };
 
+  const handleModelsChange = (event: React.ChangeEvent<HTMLInputElement>, models: string[]) => {
+    listingFilterVar({ ...listingFilterVar(), model: event.target.checked ? [...listingFilterVar().model, ...models] : [...listingFilterVar().model.filter(m => !models.includes(m))] })
+  }
+
   const children = (
     <Box sx={{ display: 'flex', flexDirection: 'column', ml: 3 }}>
       {models.map((model, i) =>
@@ -47,7 +51,10 @@ const ModelFilter: React.FC<ModelFilterProps> = ({ make, models }) => {
             // maybe there's a more efficient function here, like a reducer that stops as soon as it's false
             checked={whetherArraysEqual(checked, Array(checked.length).fill(true))}
             indeterminate={checked.some(element => element !== checked[0])}
-            onChange={event => setChecked(Array(checked.length).fill(event.target.checked))}
+            onChange={event => {
+              setChecked(Array(checked.length).fill(event.target.checked));
+              handleModelsChange(event, models);
+            }}
           />
         }
       />

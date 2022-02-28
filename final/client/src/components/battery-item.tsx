@@ -14,8 +14,10 @@ interface BatteryItemProps {
 
 const estimateSOH = (years: number, milesThousands: number): number => {
   const driveWear = milesThousands / 150 / 2
+  // eg. 27/150/2 = .09
   const ageWear = years / 12 / 2
-  return Math.round(100 - driveWear - ageWear)
+  // eg. 5/12/2 = .21
+  return Math.round((1 - driveWear - ageWear) * 100)
 }
 
 const currentDate = new Date()
@@ -37,7 +39,8 @@ const BatteryItem: React.FC<BatteryItemProps> = ({ battery }) => {
         </Grid>
         <Grid item md={2}>
           <Box sx={{ typography: 'subtitle2' }}>Vehicle</Box>
-          <Box sx={{ typography: 'body2' }}>{`${battery.year} ${make} ${model}, ` + (battery.odometerThousands ? `${battery.odometerThousands}k miles` : 'odometer unavailable')}</Box>
+          <Box sx={{ typography: 'body2' }}>{`${battery.year} ${make} ${model}`}</Box>
+          <Box sx={{ typography: 'body2', color: (battery.year && battery.odometerThousands) ? 'text.primary' : 'text.secondary' }}>{battery.odometerThousands ? `${battery.odometerThousands}k miles` : 'odometer unavailable'}</Box>
           <Box sx={{ typography: 'body2', color: (battery.year && battery.odometerThousands) ? 'text.primary' : 'text.secondary' }}>{(battery.year && battery.odometerThousands) ? `Estimated SOH: ${estimateSOH(currentYear - parseInt(battery.year), battery.odometerThousands)}%` : "SOH estimate unavailable"}</Box>
         </Grid>
         <Grid item md={2}>
