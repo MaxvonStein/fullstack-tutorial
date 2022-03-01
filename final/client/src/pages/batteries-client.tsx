@@ -5,13 +5,15 @@ import { LaunchTile, Header, Loading } from '../components';
 import { RouteComponentProps } from '@reach/router';
 import * as GetTypes from '../__generated-graphql-codegen__/types'
 import Link from '@mui/material/Link'
+import Typography from '@mui/material/Typography'
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import BatteryItem from '../components/battery-item';
 import { Grid } from '@mui/material';
 import ModelFilter from '../components/model-filter';
+import ModuleFilter from '../components/module-filter';
 import { listingFilterVar } from '../cache';
-import { makeModels, MakeModels } from '../utils/constants'
+import { makeModels, MakeModels, ModuleGenerations, popularMakes, moduleGenerations, modelGenerations } from '../utils/constants'
 // import typeDefs from '../index'
 
 export const GET_LISTINGS = gql`
@@ -71,12 +73,18 @@ const BatteriesClient: React.FC<BatteriesProps> = () => {
       <Header />
       <Grid container>
         <Grid item lg={3}>
+          <Typography>Make & Model</Typography>
           {
-            Object.keys(makeModels).map((makeKey: string) =>
-              <ModelFilter make={makeKey} models={(makeModels as MakeModels)[makeKey].map(({ model }) => model)} />
+            popularMakes.map((make: string) =>
+              <ModelFilter make={make} models={(makeModels as MakeModels)[make].map(({ model }) => model)} />
             )
           }
-          {/* <ModelFilter make="Toyota" models={["Prius", "Camry"]} /> */}
+          <Typography>Module</Typography>
+          {
+            Object.keys(moduleGenerations).map(makeKey =>
+              <ModuleFilter make={makeKey} modules={(moduleGenerations as ModuleGenerations)[makeKey]} />
+            )
+          }
         </Grid>
         <Grid item lg={9}>
           {/* what about a sort child component here that would take filteredBatteries and deal with sorting only, no queries */}

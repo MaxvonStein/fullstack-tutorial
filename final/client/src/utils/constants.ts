@@ -26,7 +26,64 @@ export interface MakeModels {
   [key: string] : Model[];
 }
 
+export interface ModuleGenerations {
+  [key: string] : string[];
+}
+
 const popularMakes = ["Ford", "Chevrolet", "Nissan", "Honda", "Toyota", "Chevrolet", "Tesla"]
+
+const moduleGenerations = {
+  Toyota: [
+    "NiMH Gen1",
+    "NiMH Gen2",
+    "NiMH Gen3",
+    "NiMH Gen4",
+    "Li-ion Gen1 2012-2015",
+    "Li-ion Gen2 2016-2022",
+  ]
+}
+
+const modelGenerations = {
+  Toyota: [
+    "Prius 2016-2019",
+    "Prius 2010-2015",
+    "Prius 2004-2009",
+    "Prius 2001-2003",
+    "Prius C",
+    "Prius V",
+    "Avalon 2012-2016",
+    "Camry 2007-2011",
+    "Camry 2012-2016",
+    "Highlander 2006-2009",
+    "Highlander 2010-2016",
+  ],
+  Honda: [
+    "Accord Hybrid 2005-2007",
+    "Civic Hybrid 2012-2015",
+    "Civic Hybrid 2006-2011",
+    "Civic Hybrid 2003-2005",
+    "CRZ 2010-2012",
+    "Insight 2000-2006",
+    "Insight 2010-2014",
+  ],
+  Chevrolet: [
+    "Malibu 2008-2012",
+    "Silverado 2009-2013",
+    "Tahoe 2007-2013",
+    "Volt",
+  ],
+  Chrysler: ["Aspen"],
+  Dodge: ["Durango"],
+  Ford: ["Escape 2005-2009", "Escape 2010-2013", "Fusion"],
+  GMC: ["Sierra 2007-2013", "Yukon 2007-2013"],
+  Hyundai: ["Sonata 2011-2015"],
+  Kia: ["Optima 2010-2014"],
+  Lexus: ["CT 200h", "ES 300h", "GS 450h", "LS 600H", "RX 400h", "RX 450h"],
+  Mazda: ["Tribute 2005-2009", "Tribute 2010-2013"],
+  Mercury: ["Mariner", "Milan"],
+  Nissan: ["Altima 2007-2011", "LEAF"],
+};
+
 
 const makeModels = {
   Acura: [
@@ -11039,4 +11096,4 @@ const makeModels = {
 };
 
 
-export { makeModels, popularMakes }
+export { makeModels, popularMakes, modelGenerations, moduleGenerations }
