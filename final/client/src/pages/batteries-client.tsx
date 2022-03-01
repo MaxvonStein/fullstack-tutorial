@@ -13,19 +13,23 @@ import { Grid } from '@mui/material';
 import ModelFilter from '../components/model-filter';
 import ModuleFilter from '../components/module-filter';
 import { listingFilterVar } from '../cache';
-import { makeModels, MakeModels, ModuleGenerations, popularMakes, moduleGenerations, modelGenerations } from '../utils/constants'
+import { makeModels, MakeModels, popularMakes, moduleGenerations, ModuleGenerations, modelGenerations, ModelGenerations } from '../utils/constants'
 // import typeDefs from '../index'
 
 export const GET_LISTINGS = gql`
   query GetListingList {
     listingFilter @client {
       model
+      module
+      generation
     }
     listings {
       __typename
       make
       model
       imageSrc
+      generation
+      module
       isComplete
       year
       subModel
@@ -52,7 +56,9 @@ interface BatteriesProps extends RouteComponentProps { }
 
 export type ListingFilterVarType = {
   __typename: string,
-  model: string[],
+  generation: string[],
+  module: string[],
+  model: string[]
 }
 
 const BatteriesClient: React.FC<BatteriesProps> = () => {
@@ -75,14 +81,14 @@ const BatteriesClient: React.FC<BatteriesProps> = () => {
         <Grid item lg={3}>
           <Typography>Make & Model</Typography>
           {
-            popularMakes.map((make: string) =>
-              <ModelFilter make={make} models={(makeModels as MakeModels)[make].map(({ model }) => model)} />
+            Object.keys(modelGenerations).map((makeKey: string) =>
+              <ModelFilter make={makeKey} models={(modelGenerations as ModelGenerations)[makeKey]} />
             )
           }
           <Typography>Module</Typography>
           {
             Object.keys(moduleGenerations).map(makeKey =>
-              <ModuleFilter make={makeKey} modules={(moduleGenerations as ModuleGenerations)[makeKey]} />
+              <ModuleFilter make={makeKey} modules={(moduleGenerations as ModuleGenerations)[makeKey].map(({ name }) => name)} />
             )
           }
         </Grid>

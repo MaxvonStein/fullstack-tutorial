@@ -30,7 +30,7 @@ export const typeDefs = gql`
     listingFilter: ListingFilter!
   }
 
-  type ListingFilter {model: [String]!}
+  type ListingFilter {generation: [String]!, model: [String]!, module: [String]!}
 `;
 
 // source: https://www.apollographql.com/docs/react/networking/authentication/

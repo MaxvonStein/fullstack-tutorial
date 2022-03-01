@@ -47,4 +47,4 @@ export const cache: InMemoryCache = new InMemoryCache({
 export const isLoggedInVar =
   makeVar<boolean>(!!localStorage.getItem('token'));
 export const cartItemsVar = makeVar<string[]>([]);
-export const listingFilterVar = makeVar<{model: string[], module: string[]}>({model: [], module: []});
+export const listingFilterVar = makeVar<{model: string[], module: string[], generation: string[]}>({model: [], module: [], generation: []});

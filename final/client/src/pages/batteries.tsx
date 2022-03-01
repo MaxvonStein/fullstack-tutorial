@@ -46,10 +46,11 @@ export const GET_FILTERED_LISTINGS = gql`
 
 interface BatteriesProps extends RouteComponentProps { }
 
-export type ListingFilterVarType = {
-  __typename: string,
-  model: string[],
-}
+// export type ListingFilterVarType = {
+//   __typename: string,
+//   model: string[],
+//   generation: string[]
+// }
 
 const Batteries: React.FC<BatteriesProps> = () => {
   const {

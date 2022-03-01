@@ -1,4 +1,4 @@
-export interface Model {
+interface Model {
   category: string;
       model: string;
       year: number | null;
@@ -26,7 +26,19 @@ export interface MakeModels {
   [key: string] : Model[];
 }
 
+interface Generation {
+  name: string;
+  model: string;
+  firstYear: number;
+  lastYear: number;
+}
+
 export interface ModuleGenerations {
+  [key: string] : Generation[];
+}
+
+
+export interface ModelGenerations {
   [key: string] : string[];
 }
 
@@ -34,13 +46,69 @@ const popularMakes = ["Ford", "Chevrolet", "Nissan", "Honda", "Toyota", "Chevrol
 
 const moduleGenerations = {
   Toyota: [
-    "NiMH Gen1",
-    "NiMH Gen2",
-    "NiMH Gen3",
-    "NiMH Gen4",
-    "Li-ion Gen1 2012-2015",
-    "Li-ion Gen2 2016-2022",
-  ]
+    {
+      name: "NiMH Gen1",
+      model: "Prius",
+      firstYear: 2000,
+      lastYear: 2003
+    },
+    {
+      name: "NiMH Gen2",
+      model: "Prius",
+      firstYear: 2004,
+      lastYear: 2009
+    },
+    {
+      name: "NiMH Gen3",
+      model: "Prius",
+      firstYear: 2010,
+      lastYear: 2015
+    },
+    {
+      name: "NiMH Gen4",
+      model: "Prius",
+      firstYear: 2016,
+      lastYear: 2022
+    },
+    {
+      name: "Li-ion Gen1",
+      model: "Prius",
+      firstYear: 2012,
+      lastYear: 2015
+    },
+    {
+      name: "Li-ion Gen2",
+      model: "Prius",
+      firstYear: 2016,
+      lastYear: 2022
+    }
+  ],
+  Honda: [
+    {
+    name: "NiMH Gen1",
+      model: "Insight",
+      firstYear: 2000,
+      lastYear: 2006
+    },
+    {
+    name: "NiMH Gen2",
+      model: "Civic Hybrid",
+      firstYear: 2003,
+      lastYear: 2005
+    },
+    {
+    name: "NiMH Gen3",
+      model: "Civic Hybrid",
+      firstYear: 2006,
+      lastYear: 2011
+    },
+    {
+    name: "Li-ion Gen1",
+      model: "Insight",
+      firstYear: 2019,
+      lastYear: 2022
+    },
+  ],
 }
 
 const modelGenerations = {
@@ -51,11 +119,11 @@ const modelGenerations = {
     "Prius 2001-2003",
     "Prius C",
     "Prius V",
-    "Avalon 2012-2016",
-    "Camry 2007-2011",
-    "Camry 2012-2016",
-    "Highlander 2006-2009",
-    "Highlander 2010-2016",
+    "Avalon Hybrid 2012-2016",
+    "Camry Hybrid 2007-2011",
+    "Camry Hybrid 2012-2016",
+    "Highlander Hybrid 2006-2009",
+    "Highlander Hybrid 2010-2016",
   ],
   Honda: [
     "Accord Hybrid 2005-2007",

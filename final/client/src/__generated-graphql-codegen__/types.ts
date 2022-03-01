@@ -47,6 +47,7 @@ export type QueryLaunchesArgs = {
 };
 
 export type BatteryFilter = {
+  generation?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
   model?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
 };
 
@@ -55,6 +56,7 @@ export type Battery = {
   dealer?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
   distance?: Maybe<Scalars['Int']>;
+  generation: Scalars['String'];
   generationEnd?: Maybe<Scalars['String']>;
   generationStart?: Maybe<Scalars['String']>;
   imageSrc?: Maybe<Scalars['String']>;
@@ -66,12 +68,13 @@ export type Battery = {
   isWarrantied?: Maybe<Scalars['Boolean']>;
   make: Scalars['String'];
   model: Scalars['String'];
+  module: Scalars['String'];
   odometerThousands?: Maybe<Scalars['Int']>;
   partGrade?: Maybe<Scalars['String']>;
   price?: Maybe<Scalars['Int']>;
   sellerType?: Maybe<Scalars['String']>;
   subModel?: Maybe<Scalars['String']>;
-  year?: Maybe<Scalars['String']>;
+  year?: Maybe<Scalars['Int']>;
 };
 
 export type User = {
@@ -133,7 +136,9 @@ export type LaunchConnection = {
 
 export type ListingFilter = {
   __typename?: 'ListingFilter';
+  generation: Array<Maybe<Scalars['String']>>;
   model: Array<Maybe<Scalars['String']>>;
+  module: Array<Maybe<Scalars['String']>>;
 };
 
 export type BasicUser = {
@@ -371,14 +376,14 @@ export type IsUserLoggedInQuery = { __typename?: 'Query', isLoggedIn: boolean };
 export type GetListingListQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetListingListQuery = { __typename?: 'Query', listingFilter: { __typename?: 'ListingFilter', model: Array<string | null> }, listings?: Array<{ __typename: 'Battery', make: string, model: string, imageSrc?: string | null, isComplete?: boolean | null, year?: string | null, subModel?: string | null, generationStart?: string | null, generationEnd?: string | null, description?: string | null, partGrade?: string | null, dealer?: string | null, distance?: number | null, price?: number | null, isReman?: boolean | null, isCore?: boolean | null, isNoShip?: boolean | null, isShippingAvailable?: boolean | null, sellerType?: string | null, isWarrantied?: boolean | null, odometerThousands?: number | null } | null> | null };
+export type GetListingListQuery = { __typename?: 'Query', listingFilter: { __typename?: 'ListingFilter', model: Array<string | null>, module: Array<string | null>, generation: Array<string | null> }, listings?: Array<{ __typename: 'Battery', make: string, model: string, imageSrc?: string | null, generation: string, module: string, isComplete?: boolean | null, year?: number | null, subModel?: string | null, generationStart?: string | null, generationEnd?: string | null, description?: string | null, partGrade?: string | null, dealer?: string | null, distance?: number | null, price?: number | null, isReman?: boolean | null, isCore?: boolean | null, isNoShip?: boolean | null, isShippingAvailable?: boolean | null, sellerType?: string | null, isWarrantied?: boolean | null, odometerThousands?: number | null } | null> | null };
 
 export type GetFilteredListingsQueryVariables = Exact<{
   batteryFilter?: InputMaybe<BatteryFilter>;
 }>;
 
 
-export type GetFilteredListingsQuery = { __typename?: 'Query', listingFilter: { __typename?: 'ListingFilter', model: Array<string | null> }, filteredListings?: Array<{ __typename: 'Battery', make: string, model: string, imageSrc?: string | null, isComplete?: boolean | null, year?: string | null, subModel?: string | null, generationStart?: string | null, generationEnd?: string | null, description?: string | null, partGrade?: string | null, dealer?: string | null, distance?: number | null, price?: number | null, isReman?: boolean | null, isCore?: boolean | null, isNoShip?: boolean | null, isShippingAvailable?: boolean | null, sellerType?: string | null, isWarrantied?: boolean | null, odometerThousands?: number | null } | null> | null };
+export type GetFilteredListingsQuery = { __typename?: 'Query', listingFilter: { __typename?: 'ListingFilter', model: Array<string | null> }, filteredListings?: Array<{ __typename: 'Battery', make: string, model: string, imageSrc?: string | null, isComplete?: boolean | null, year?: number | null, subModel?: string | null, generationStart?: string | null, generationEnd?: string | null, description?: string | null, partGrade?: string | null, dealer?: string | null, distance?: number | null, price?: number | null, isReman?: boolean | null, isCore?: boolean | null, isNoShip?: boolean | null, isShippingAvailable?: boolean | null, sellerType?: string | null, isWarrantied?: boolean | null, odometerThousands?: number | null } | null> | null };
 
 export type GetCartItemsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -606,12 +611,16 @@ export const GetListingListDocument = gql`
     query GetListingList {
   listingFilter @client {
     model
+    module
+    generation
   }
   listings {
     __typename
     make
     model
     imageSrc
+    generation
+    module
     isComplete
     year
     subModel

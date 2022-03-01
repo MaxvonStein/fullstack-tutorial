@@ -41,7 +41,7 @@ const BatteryItem: React.FC<BatteryItemProps> = ({ battery }) => {
           <Box sx={{ typography: 'subtitle2' }}>Vehicle</Box>
           <Box sx={{ typography: 'body2' }}>{`${battery.year} ${make} ${model}`}</Box>
           <Box sx={{ typography: 'body2', color: (battery.year && battery.odometerThousands) ? 'text.primary' : 'text.secondary' }}>{battery.odometerThousands ? `${battery.odometerThousands}k miles` : 'odometer unavailable'}</Box>
-          <Box sx={{ typography: 'body2', color: (battery.year && battery.odometerThousands) ? 'text.primary' : 'text.secondary' }}>{(battery.year && battery.odometerThousands) ? `Estimated SOH: ${estimateSOH(currentYear - parseInt(battery.year), battery.odometerThousands)}%` : "SOH estimate unavailable"}</Box>
+          <Box sx={{ typography: 'body2', color: (battery.year && battery.odometerThousands) ? 'text.primary' : 'text.secondary' }}>{(battery.year && battery.odometerThousands) ? `Estimated SOH: ${estimateSOH(currentYear - battery.year, battery.odometerThousands)}%` : "SOH estimate unavailable"}</Box>
         </Grid>
         <Grid item md={2}>
           <Box sx={{ typography: 'subtitle2' }}>Seller</Box>
