@@ -33,7 +33,20 @@ module.exports = {
     // listings: authenticated((_, __, { dataSources }) => {
     //   return dataSources.listingAPI.getListings();
     // }),
+    modules: (_, __, { dataSources }) => dataSources.moduleAPI.getModules(),
     listings: (_, __, { dataSources }) => dataSources.listingAPI.getListings(),
+    // temporarily add a generation until mongo server catches up
+    // listings: async (_, __, { dataSources }) => {
+    //   let response = await dataSources.listingAPI.getListings();
+    //   console.log(response.slice(0, 3));
+    //   return response.map((listing) => {
+    //     listing.generation = listing.generation
+    //       ? listing.generation
+    //       : "resolver_generation";
+    //     listing.module = listing.module ? listing.module : "resolver_module";
+    //     return listing;
+    //   });
+    // },
     filteredListings: (_, { batteryFilter }, { dataSources }) => {
       // remove empty fields from batteryFilter to create a valid findQuery to pass to the API
       const findQuery = Object.keys(batteryFilter).reduce((previous, key) => {
@@ -45,6 +58,8 @@ module.exports = {
 
       return dataSources.listingAPI.getFilteredListings(findQuery);
     },
+    listing: (_, { id }, { dataSources }) =>
+      dataSources.listingAPI.getListingById({ listingId: id }),
     authenticatedQuery: authenticated((root, args, context, info) => {
       return "authenticated information here";
     }),
@@ -89,6 +104,14 @@ module.exports = {
         user.token = Buffer.from(email).toString("base64");
         return user;
       }
+    },
+  },
+  Battery: {
+    module: async (battery, _, { dataSources }) => {
+      const module = await dataSources.moduleAPI.getModuleById({
+        moduleId: battery.moduleId,
+      });
+      return module;
     },
   },
   Launch: {

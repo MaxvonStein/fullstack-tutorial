@@ -29,7 +29,6 @@ export const GET_LISTINGS = gql`
       model
       imageSrc
       generation
-      module
       isComplete
       year
       subModel

@@ -1,8 +1,51 @@
 const { gql } = require("apollo-server");
+const {
+  GraphQLObjectType,
+  GraphQLString,
+  GraphQLInt,
+  GraphQLList,
+} = require("graphql");
+// const GraphQLObjectId = require("graphql-scalar-objectid");
+const GraphQLObjectId = require("graphql-objectid-scalar");
+
+const BatteryType = new GraphQLObjectType({
+  name: "Battery",
+  fields: {
+    _id: {
+      type: GraphQLObjectId,
+    },
+    name: {
+      type: GraphQLString,
+    },
+  },
+});
+
+// source: https://graphql.org/graphql-js/constructing-types/
+const ModuleType = new GraphQLObjectType({
+  name: "Module",
+  fields: {
+    _id: { type: GraphQLObjectId },
+    name: { type: GraphQLString },
+    make: { type: GraphQLString },
+    model: { type: GraphQLString },
+    firstYear: { type: GraphQLInt },
+    lastYear: { type: GraphQLInt },
+  },
+});
+
+const modulesQueryType = new GraphQLObjectType({
+  name: "Query",
+  fields: {
+    modules: {
+      type: new GraphQLList(ModuleType),
+    },
+  },
+});
 
 // source (directive): https://www.accountsjs.com/docs/getting-started/
 const typeDefs = gql`
   directive @auth on FIELD_DEFINITION | OBJECT
+  scalar GraphQLObjectId
   type Query {
     launches(
       """
@@ -18,6 +61,8 @@ const typeDefs = gql`
     me: BasicUser
     listings: [Battery]
     filteredListings(batteryFilter: BatteryFilter): [Battery]
+    modules: [Module]
+    listing(id: ID!): Battery
     authenticatedQuery: String
   }
 
@@ -79,7 +124,11 @@ const typeDefs = gql`
   type Battery {
     make: String!
     model: String!
-    year: String
+    generation: String!
+    module: Module
+    moduleId: GraphQLObjectId
+    moduleCount: Int
+    year: Int
     subModel: String
     generationStart: String
     generationEnd: String
@@ -99,8 +148,20 @@ const typeDefs = gql`
     isComplete: Boolean
   }
 
+  type Module {
+    _id: GraphQLObjectId
+    name: String
+    make: String
+    models: [String]
+    firstYear: Int
+    lastYear: Int
+    kwh: Float
+  }
+
   input BatteryFilter {
     model: [String]
+    generation: [String]
+    module: [String]
   }
 
   enum PatchSize {
@@ -109,4 +170,4 @@ const typeDefs = gql`
   }
 `;
 
-module.exports = typeDefs;
+module.exports = { typeDefs, modulesQueryType };

@@ -15,10 +15,11 @@ const { mergeTypeDefs, mergeResolvers } = require("@graphql-tools/merge");
 
 const isEmail = require("isemail");
 
-const typeDefs = require("./schema");
+const { typeDefs, modulesQueryType } = require("./schema");
 const resolvers = require("./resolvers");
 const { createStore } = require("./utils");
 const ListingAPI = require("./datasources/listing");
+const ModuleAPI = require("./datasources/module");
 
 // quick try based on: https://stackoverflow.com/questions/59657450/mongoerror-topology-is-closed-please-connect
 const dbURL = `mongodb+srv://${process.env.MONGO_USER_USERNAME}:${process.env.MONGO_USER_PASSWORD}@battery-marketplace.g9e2h.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
@@ -111,7 +112,11 @@ MongoClient.connect(
 
     // source: https://github.com/pradel/accounts-js-server-tutorial/blob/master/index.js
     let schema = makeExecutableSchema({
-      typeDefs: mergeTypeDefs([typeDefs, accountsGraphQL.typeDefs]),
+      typeDefs: mergeTypeDefs([
+        typeDefs,
+        // { Query: modulesQueryType },
+        accountsGraphQL.typeDefs,
+      ]),
       resolvers: mergeResolvers([accountsGraphQL.resolvers, resolvers]),
       schemaDirectives: {
         ...accountsGraphQL.schemaDirectives,
@@ -134,7 +139,8 @@ MongoClient.connect(
       context: accountsGraphQL.context,
       dataSources: () => {
         return {
-          listingAPI: new ListingAPI(db.collection("collection_new")),
+          listingAPI: new ListingAPI(db.collection("listings")),
+          moduleAPI: new ModuleAPI(db.collection("modules")),
         };
       },
     });

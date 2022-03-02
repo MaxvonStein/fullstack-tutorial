@@ -44,6 +44,33 @@ export interface ModelGenerations {
 
 const popularMakes = ["Ford", "Chevrolet", "Nissan", "Honda", "Toyota", "Chevrolet", "Tesla"]
 
+let sampleModuleGenerations = {
+Ford: [
+  {
+    name: "NiMH Gen1",
+    model: "",
+    firstYear: 2000,
+    lastYear: 2022
+  }
+],
+Chevrolet: [
+  {
+    name: "NiMH Gen1",
+    model: "",
+    firstYear: 2000,
+    lastYear: 2022
+  }
+],
+Nissan: [
+  {
+    name: "NiMH Gen1",
+    model: "",
+    firstYear: 2000,
+    lastYear: 2022
+  }
+]
+}
+
 const moduleGenerations = {
   Toyota: [
     {
@@ -109,6 +136,7 @@ const moduleGenerations = {
       lastYear: 2022
     },
   ],
+  ...sampleModuleGenerations
 }
 
 const modelGenerations = {

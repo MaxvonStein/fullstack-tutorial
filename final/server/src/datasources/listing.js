@@ -10,6 +10,9 @@ class ListingAPI extends MongoDataSource {
     // batteryFilter eg. {model: ["Camry", "Highlander"]}
     return await this.findByFields(findQuery);
   }
+  async getListingById({ listingId }) {
+    return await this.findOneById(listingId);
+  }
 }
 
 module.exports = ListingAPI;
