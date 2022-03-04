@@ -63,7 +63,7 @@ interface RocketInventoryData {
   listingFilter: ListingFilterVarType;
 }
 
-const BatteriesClient: React.FC<BatteriesProps> = () => {
+const Batteries: React.FC<BatteriesProps> = () => {
   const {
     data,
     loading,
@@ -144,4 +144,4 @@ const BatteriesClient: React.FC<BatteriesProps> = () => {
   );
 }
 
-export default BatteriesClient;
+export default Batteries;

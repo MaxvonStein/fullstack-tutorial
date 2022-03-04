@@ -5,10 +5,9 @@ import Launch from './launch';
 import Launches from './launches';
 import Cart from './cart';
 import Profile from './profile';
-import Batteries from './batteries';
 import { Footer, PageContainer } from '../components';
 import Login from './login';
-import BatteriesClient from './batteries-client';
+import Batteries from './batteries';
 
 export default function Pages() {
   return (
@@ -16,13 +15,12 @@ export default function Pages() {
       <PageContainer>
         <Router primary={false} component={Fragment}>
           <Batteries path="/batteries" />
-          <BatteriesClient path="/batteries-client" />
           <Login path="/login" />
           <Launches path="/launches" />
           <Launch path="launch/:launchId" />
           <Cart path="cart" />
           <Profile path="profile" />
-          <BatteriesClient path="/" />
+          <Batteries path="/" />
 
         </Router>
       </PageContainer>
