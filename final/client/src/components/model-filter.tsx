@@ -22,11 +22,11 @@ const ModelFilter: React.FC<ModelFilterProps> = ({ make, models }) => {
   const [expanded, setExpanded] = React.useState(false);
 
   const handleModelChange = (event: React.ChangeEvent<HTMLInputElement>, model: string) => {
-    listingFilterVar({ ...listingFilterVar(), model: event.target.checked ? [...listingFilterVar().model, model] : [...listingFilterVar().model.filter(m => m != model)] })
+    listingFilterVar({ ...listingFilterVar(), generation: event.target.checked ? [...listingFilterVar().generation, model] : [...listingFilterVar().generation.filter(m => m != model)] })
   };
 
   const handleModelsChange = (event: React.ChangeEvent<HTMLInputElement>, models: string[]) => {
-    listingFilterVar({ ...listingFilterVar(), model: event.target.checked ? [...listingFilterVar().model, ...models] : [...listingFilterVar().model.filter(m => !models.includes(m))] })
+    listingFilterVar({ ...listingFilterVar(), generation: event.target.checked ? [...listingFilterVar().generation, ...models] : [...listingFilterVar().generation.filter(m => !models.includes(m))] })
   }
 
   const toggleExpanded = () => setExpanded(prev => !prev)

@@ -158,9 +158,9 @@ export type LaunchConnection = {
 
 export type ListingFilter = {
   __typename?: 'ListingFilter';
-  generation: Scalars['String'];
-  model: Scalars['String'];
-  moduleId: Scalars['String'];
+  generation: Array<Maybe<Scalars['String']>>;
+  model: Array<Maybe<Scalars['String']>>;
+  moduleId: Array<Maybe<Scalars['String']>>;
 };
 
 export type BasicUser = {
