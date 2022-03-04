@@ -126,7 +126,9 @@ const typeDefs = gql`
     model: String!
     generation: String!
     moduleId: GraphQLObjectId!
-    module: BatteryModule
+    price: Int!
+    module: BatteryModule!
+    moduleCount: Int
     year: Int
     subModel: String
     generationStart: String
@@ -136,16 +138,15 @@ const typeDefs = gql`
     partGrade: String
     dealer: String
     distance: Int
-    price: Int
     isReman: Boolean
     isCore: Boolean
     isNoShip: Boolean
     isShippingAvailable: Boolean
+    shippingCost: Int
     sellerType: String
     isWarrantied: Boolean
     odometerThousands: Int
     isComplete: Boolean
-    moduleCount: Int
   }
 
   type BatteryModule {
@@ -155,7 +156,7 @@ const typeDefs = gql`
     models: [String]
     firstYear: Int
     lastYear: Int
-    kwh: Float
+    kwh: Float!
   }
 
   input BatteryFilter {

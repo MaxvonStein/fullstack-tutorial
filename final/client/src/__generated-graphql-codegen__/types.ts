@@ -77,13 +77,14 @@ export type Battery = {
   isWarrantied?: Maybe<Scalars['Boolean']>;
   make: Scalars['String'];
   model: Scalars['String'];
-  module?: Maybe<BatteryModule>;
-  moduleCount?: Maybe<Scalars['Int']>;
+  module: BatteryModule;
+  moduleCount: Scalars['Int'];
   moduleId: Scalars['GraphQLObjectId'];
   odometerThousands?: Maybe<Scalars['Int']>;
   partGrade?: Maybe<Scalars['String']>;
-  price?: Maybe<Scalars['Int']>;
+  price: Scalars['Int'];
   sellerType?: Maybe<Scalars['String']>;
+  shippingCost: Scalars['Int'];
   subModel?: Maybe<Scalars['String']>;
   year?: Maybe<Scalars['Int']>;
 };
@@ -92,7 +93,7 @@ export type BatteryModule = {
   __typename?: 'BatteryModule';
   _id: Scalars['GraphQLObjectId'];
   firstYear?: Maybe<Scalars['Int']>;
-  kwh?: Maybe<Scalars['Float']>;
+  kwh: Scalars['Float'];
   lastYear?: Maybe<Scalars['Int']>;
   make: Scalars['String'];
   models?: Maybe<Array<Maybe<Scalars['String']>>>;
@@ -398,14 +399,14 @@ export type IsUserLoggedInQuery = { __typename?: 'Query', isLoggedIn: boolean };
 export type ListingsForBatteriesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type ListingsForBatteriesQuery = { __typename?: 'Query', listings: Array<{ __typename?: 'Battery', make: string, model: string, moduleId: any, generation: string, imageSrc?: string | null, isComplete?: boolean | null, year?: number | null, dealer?: string | null, price?: number | null, sellerType?: string | null, odometerThousands?: number | null } | null>, modules: Array<{ __typename?: 'BatteryModule', make: string } | null>, listingFilter: { __typename?: 'ListingFilter', model: Array<string | null>, moduleId: Array<string | null>, generation: Array<string | null> } };
+export type ListingsForBatteriesQuery = { __typename?: 'Query', listings: Array<{ __typename?: 'Battery', make: string, model: string, moduleId: any, generation: string, imageSrc?: string | null, isComplete?: boolean | null, year?: number | null, dealer?: string | null, price: number, sellerType?: string | null, odometerThousands?: number | null, isWarrantied?: boolean | null, isCore?: boolean | null, isShippingAvailable?: boolean | null, shippingCost: number, moduleCount: number, module: { __typename?: 'BatteryModule', kwh: number } } | null>, modules: Array<{ __typename?: 'BatteryModule', make: string } | null>, listingFilter: { __typename?: 'ListingFilter', model: Array<string | null>, moduleId: Array<string | null>, generation: Array<string | null> } };
 
 export type GetFilteredListingsQueryVariables = Exact<{
   batteryFilter?: InputMaybe<BatteryFilter>;
 }>;
 
 
-export type GetFilteredListingsQuery = { __typename?: 'Query', listingFilter: { __typename?: 'ListingFilter', model: Array<string | null> }, filteredListings?: Array<{ __typename: 'Battery', make: string, model: string, imageSrc?: string | null, isComplete?: boolean | null, year?: number | null, subModel?: string | null, generationStart?: string | null, generationEnd?: string | null, description?: string | null, partGrade?: string | null, dealer?: string | null, distance?: number | null, price?: number | null, isReman?: boolean | null, isCore?: boolean | null, isNoShip?: boolean | null, isShippingAvailable?: boolean | null, sellerType?: string | null, isWarrantied?: boolean | null, odometerThousands?: number | null } | null> | null };
+export type GetFilteredListingsQuery = { __typename?: 'Query', listingFilter: { __typename?: 'ListingFilter', model: Array<string | null> }, filteredListings?: Array<{ __typename: 'Battery', make: string, model: string, imageSrc?: string | null, isComplete?: boolean | null, year?: number | null, subModel?: string | null, generationStart?: string | null, generationEnd?: string | null, description?: string | null, partGrade?: string | null, dealer?: string | null, distance?: number | null, price: number, isReman?: boolean | null, isCore?: boolean | null, isNoShip?: boolean | null, isShippingAvailable?: boolean | null, sellerType?: string | null, isWarrantied?: boolean | null, odometerThousands?: number | null } | null> | null };
 
 export type GetCartItemsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -643,6 +644,14 @@ export const ListingsForBatteriesDocument = gql`
     price
     sellerType
     odometerThousands
+    isWarrantied
+    isCore
+    isShippingAvailable
+    shippingCost @client
+    moduleCount @client
+    module {
+      kwh
+    }
   }
   modules {
     make

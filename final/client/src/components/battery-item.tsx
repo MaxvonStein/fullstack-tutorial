@@ -20,6 +20,9 @@ const estimateSOH = (years: number, milesThousands: number): number => {
   return Math.round((1 - driveWear - ageWear) * 100)
 }
 
+const getKwhPrice = (price: number, kwh: number) => Math.round(price / kwh)
+const getModulePrice = (price: number, moduleCount: number) => (price / moduleCount).toFixed(2)
+
 const currentDate = new Date()
 const currentYear = currentDate.getFullYear()
 
@@ -48,6 +51,13 @@ const BatteryItem: React.FC<BatteryItemProps> = ({ battery }) => {
           <Box sx={{ typography: 'body2' }}>{battery.dealer?.substring(0, 15)}</Box>
           <Box sx={{ typography: 'body2' }}>{battery.sellerType}</Box>
           <StarBox stars={Math.floor(Math.random() * 4 + 1)} />
+        </Grid>
+        <Grid item md={2}>
+          <Box sx={{ typography: 'subtitle2' }}>Pricing & Terms</Box>
+          <Box sx={{ typography: 'body2' }}>${getKwhPrice(battery.price, battery.moduleCount * battery.module.kwh)} /kWh</Box>
+          <Box sx={{ typography: 'body2' }}>${getModulePrice(battery.price, battery.moduleCount)} /module</Box>
+          <Box sx={{ typography: 'body2' }}>{battery.isWarrantied ? "Warranty included" : "As-is"}</Box>
+          <Box sx={{ typography: 'body2' }}>{battery.isShippingAvailable ? `Shipping: $${battery.shippingCost}` : "Shipping not available"}</Box>
         </Grid>
       </Grid>
     </Paper >

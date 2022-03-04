@@ -30,7 +30,17 @@ export const typeDefs = gql`
     listingFilter: ListingFilter!
   }
 
-  type ListingFilter {generation: [String]!, model: [String]!, moduleId: [String]!}
+  type ListingFilter {
+    generation: [String]!
+    model: [String]!
+    moduleId: [String]!
+  }
+
+  # add client-only Battery fields solely for codegen types
+  type Battery {
+    moduleCount: Int!
+    shippingCost: Int!
+  }
 `;
 // can't put a moduleId here because the plug-in isn't defined on the client and it'd be too hard anyway.  maybe use a cache function to translate it
 

@@ -29,6 +29,14 @@ const GET_LISTINGS_FOR_BATTERIES = gql`
       price
       sellerType
       odometerThousands
+      isWarrantied
+      isCore
+      isShippingAvailable
+      shippingCost @client
+      moduleCount @client
+      module {
+        kwh
+      }
     }
     modules {
       make 
@@ -110,10 +118,10 @@ const BatteriesClient: React.FC<BatteriesProps> = () => {
           {/* what about a sort child component here that would take filteredBatteries and deal with sorting only, no queries */}
           <Stack spacing={2}>
             {
-              data && data.listings && data.listingFilter && data.listingFilter.generation && data.listings.filter((batteryListing: any) => {
-                return whetherInFilter(data.listingFilter, batteryListing)
-              }).map((batteryListing: any) => (
-                <BatteryItem battery={batteryListing} />
+              data && data.listings && data.listingFilter && data.listingFilter.generation && data.listings.filter((battery: any) => {
+                return whetherInFilter(data.listingFilter, battery)
+              }).map((battery: any) => (
+                <BatteryItem battery={battery} />
               ))
 
             }

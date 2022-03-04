@@ -49,6 +49,11 @@ export const cache: InMemoryCache = new InMemoryCache({
             return 28
             // return moduleGenerations[variables.make].find(generation => generation.name = variables.generation).moduleCount
           }
+        },
+        shippingCost: {
+          read(_, { variables }) {
+            return 250
+          }
         }
       }
     }
