@@ -30,7 +30,7 @@ const currentYear = currentDate.getFullYear()
 const BatteryItem: React.FC<BatteryItemProps> = ({ battery }) => {
   const { make, model } = battery;
   return (
-    <Paper sx={{ p: 2 }}>
+    <Paper sx={{ p: 2 }} key={battery._id}>
       <Grid container spacing={2}>
         <Grid item md={2}>
           <img src={battery.imageSrc ? battery.imageSrc : ""}></img>

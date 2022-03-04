@@ -41,8 +41,8 @@ const SortStack: React.FC<SortStackProps> = ({ batteries }) => {
 
   return <Fragment>
     <Box>
-      {options.map(({ name, field }) =>
-        <Fragment>
+      {options.map(({ name, field }, i: number) =>
+        <Fragment key={i}>
           <Link sx={{ margin: 1 }} onClick={handleClick(field)}>{name}</Link>
           {
             (field == sortField) && (isReverse ? <ArrowUpwardIcon /> : <ArrowDownwardIcon />)
@@ -53,7 +53,7 @@ const SortStack: React.FC<SortStackProps> = ({ batteries }) => {
     </Box>
     <Stack>
       {
-        batteries.sort(getCompareBy(sortField)).map(battery => <BatteryItem battery={battery} />)
+        batteries.sort(getCompareBy(sortField)).map(battery => <BatteryItem battery={battery} key={battery._id} />)
       }
     </Stack>
   </Fragment>

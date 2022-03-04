@@ -62,6 +62,7 @@ export type BatteryFilter = {
 
 export type Battery = {
   __typename?: 'Battery';
+  _id: Scalars['GraphQLObjectId'];
   dealer?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
   distance?: Maybe<Scalars['Int']>;
@@ -396,17 +397,17 @@ export type IsUserLoggedInQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type IsUserLoggedInQuery = { __typename?: 'Query', isLoggedIn: boolean };
 
-export type ListingsForBatteriesQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type ListingsForBatteriesQuery = { __typename?: 'Query', listings: Array<{ __typename?: 'Battery', make: string, model: string, moduleId: any, generation: string, imageSrc?: string | null, isComplete?: boolean | null, year?: number | null, dealer?: string | null, price: number, sellerType?: string | null, odometerThousands?: number | null, isWarrantied?: boolean | null, isCore?: boolean | null, isShippingAvailable?: boolean | null, shippingCost: number, moduleCount: number, module: { __typename?: 'BatteryModule', kwh: number } } | null>, modules: Array<{ __typename?: 'BatteryModule', make: string } | null>, listingFilter: { __typename?: 'ListingFilter', model: Array<string | null>, moduleId: Array<string | null>, generation: Array<string | null> } };
-
 export type GetFilteredListingsQueryVariables = Exact<{
   batteryFilter?: InputMaybe<BatteryFilter>;
 }>;
 
 
 export type GetFilteredListingsQuery = { __typename?: 'Query', listingFilter: { __typename?: 'ListingFilter', model: Array<string | null> }, filteredListings?: Array<{ __typename: 'Battery', make: string, model: string, imageSrc?: string | null, isComplete?: boolean | null, year?: number | null, subModel?: string | null, generationStart?: string | null, generationEnd?: string | null, description?: string | null, partGrade?: string | null, dealer?: string | null, distance?: number | null, price: number, isReman?: boolean | null, isCore?: boolean | null, isNoShip?: boolean | null, isShippingAvailable?: boolean | null, sellerType?: string | null, isWarrantied?: boolean | null, odometerThousands?: number | null } | null> | null };
+
+export type ListingsForBatteriesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type ListingsForBatteriesQuery = { __typename?: 'Query', listings: Array<{ __typename?: 'Battery', _id: any, make: string, model: string, moduleId: any, generation: string, imageSrc?: string | null, isComplete?: boolean | null, year?: number | null, dealer?: string | null, price: number, sellerType?: string | null, odometerThousands?: number | null, isWarrantied?: boolean | null, isCore?: boolean | null, isShippingAvailable?: boolean | null, shippingCost: number, moduleCount: number, module: { __typename?: 'BatteryModule', kwh: number } } | null>, modules: Array<{ __typename?: 'BatteryModule', _id: any, name: string, make: string } | null>, listingFilter: { __typename?: 'ListingFilter', model: Array<string | null>, moduleId: Array<string | null>, generation: Array<string | null> } };
 
 export type GetCartItemsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -630,66 +631,6 @@ export function useIsUserLoggedInLazyQuery(baseOptions?: Apollo.LazyQueryHookOpt
 export type IsUserLoggedInQueryHookResult = ReturnType<typeof useIsUserLoggedInQuery>;
 export type IsUserLoggedInLazyQueryHookResult = ReturnType<typeof useIsUserLoggedInLazyQuery>;
 export type IsUserLoggedInQueryResult = Apollo.QueryResult<IsUserLoggedInQuery, IsUserLoggedInQueryVariables>;
-export const ListingsForBatteriesDocument = gql`
-    query ListingsForBatteries {
-  listings {
-    make
-    model
-    moduleId
-    generation
-    imageSrc
-    isComplete
-    year
-    dealer
-    price
-    sellerType
-    odometerThousands
-    isWarrantied
-    isCore
-    isShippingAvailable
-    shippingCost @client
-    moduleCount @client
-    module {
-      kwh
-    }
-  }
-  modules {
-    make
-  }
-  listingFilter @client {
-    model
-    moduleId
-    generation
-  }
-}
-    `;
-
-/**
- * __useListingsForBatteriesQuery__
- *
- * To run a query within a React component, call `useListingsForBatteriesQuery` and pass it any options that fit your needs.
- * When your component renders, `useListingsForBatteriesQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useListingsForBatteriesQuery({
- *   variables: {
- *   },
- * });
- */
-export function useListingsForBatteriesQuery(baseOptions?: Apollo.QueryHookOptions<ListingsForBatteriesQuery, ListingsForBatteriesQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<ListingsForBatteriesQuery, ListingsForBatteriesQueryVariables>(ListingsForBatteriesDocument, options);
-      }
-export function useListingsForBatteriesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ListingsForBatteriesQuery, ListingsForBatteriesQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<ListingsForBatteriesQuery, ListingsForBatteriesQueryVariables>(ListingsForBatteriesDocument, options);
-        }
-export type ListingsForBatteriesQueryHookResult = ReturnType<typeof useListingsForBatteriesQuery>;
-export type ListingsForBatteriesLazyQueryHookResult = ReturnType<typeof useListingsForBatteriesLazyQuery>;
-export type ListingsForBatteriesQueryResult = Apollo.QueryResult<ListingsForBatteriesQuery, ListingsForBatteriesQueryVariables>;
 export const GetFilteredListingsDocument = gql`
     query GetFilteredListings($batteryFilter: BatteryFilter) {
   listingFilter @client @export(as: "batteryFilter") {
@@ -749,6 +690,69 @@ export function useGetFilteredListingsLazyQuery(baseOptions?: Apollo.LazyQueryHo
 export type GetFilteredListingsQueryHookResult = ReturnType<typeof useGetFilteredListingsQuery>;
 export type GetFilteredListingsLazyQueryHookResult = ReturnType<typeof useGetFilteredListingsLazyQuery>;
 export type GetFilteredListingsQueryResult = Apollo.QueryResult<GetFilteredListingsQuery, GetFilteredListingsQueryVariables>;
+export const ListingsForBatteriesDocument = gql`
+    query ListingsForBatteries {
+  listings {
+    _id
+    make
+    model
+    moduleId
+    generation
+    imageSrc
+    isComplete
+    year
+    dealer
+    price
+    sellerType
+    odometerThousands
+    isWarrantied
+    isCore
+    isShippingAvailable
+    shippingCost @client
+    moduleCount @client
+    module {
+      kwh
+    }
+  }
+  modules {
+    _id
+    name
+    make
+  }
+  listingFilter @client {
+    model
+    moduleId
+    generation
+  }
+}
+    `;
+
+/**
+ * __useListingsForBatteriesQuery__
+ *
+ * To run a query within a React component, call `useListingsForBatteriesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useListingsForBatteriesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useListingsForBatteriesQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useListingsForBatteriesQuery(baseOptions?: Apollo.QueryHookOptions<ListingsForBatteriesQuery, ListingsForBatteriesQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ListingsForBatteriesQuery, ListingsForBatteriesQueryVariables>(ListingsForBatteriesDocument, options);
+      }
+export function useListingsForBatteriesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ListingsForBatteriesQuery, ListingsForBatteriesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ListingsForBatteriesQuery, ListingsForBatteriesQueryVariables>(ListingsForBatteriesDocument, options);
+        }
+export type ListingsForBatteriesQueryHookResult = ReturnType<typeof useListingsForBatteriesQuery>;
+export type ListingsForBatteriesLazyQueryHookResult = ReturnType<typeof useListingsForBatteriesLazyQuery>;
+export type ListingsForBatteriesQueryResult = Apollo.QueryResult<ListingsForBatteriesQuery, ListingsForBatteriesQueryVariables>;
 export const GetCartItemsDocument = gql`
     query GetCartItems {
   cartItems @client

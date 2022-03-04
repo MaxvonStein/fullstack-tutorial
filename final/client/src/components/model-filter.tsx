@@ -42,7 +42,7 @@ const ModelFilter: React.FC<ModelFilterProps> = ({ make, models }) => {
             setChecked(checked.map((item, j) => j == i ? event.target.checked : item))
             handleModelChange(event, model)
           }} />}
-        />
+          key={i.toString()} />
       )}
     </Box>
   );

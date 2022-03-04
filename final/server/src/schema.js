@@ -122,6 +122,7 @@ const typeDefs = gql`
   }
 
   type Battery {
+    _id: GraphQLObjectId!
     make: String!
     model: String!
     generation: String!

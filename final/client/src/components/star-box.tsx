@@ -15,7 +15,7 @@ interface StarBoxProps {
 
 const StarBox: React.FC<StarBoxProps> = ({ stars }) => (
   <Box>
-    {Array.from(Array(stars)).map((element, i) => <StarIcon />)
+    {Array.from(Array(stars)).map((element, i) => <StarIcon key={i.toString()} />)
     }
   </Box>
 );

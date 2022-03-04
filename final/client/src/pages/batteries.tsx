@@ -19,6 +19,7 @@ import SortStack from '../containers/sort-stack';
 const GET_LISTINGS_FOR_BATTERIES = gql`
   query ListingsForBatteries {
     listings {
+      _id
       make
       model
       moduleId
@@ -40,6 +41,8 @@ const GET_LISTINGS_FOR_BATTERIES = gql`
       }
     }
     modules {
+      _id
+      name
       make 
     }
     listingFilter @client {
@@ -101,19 +104,18 @@ const Batteries: React.FC<BatteriesProps> = () => {
         <Grid item lg={3}>
           <Typography>Make & Model</Typography>
           {
-            Object.keys(modelGenerations).map((makeKey: string) =>
-              <ModelFilter make={makeKey} models={(modelGenerations as ModelGenerations)[makeKey].map(generation => generation.name)} />
+            Object.keys(modelGenerations).map((makeKey: string, i: number) =>
+              <ModelFilter make={makeKey} models={(modelGenerations as ModelGenerations)[makeKey].map(generation => generation.name)} key={i.toString()} />
             )
           }
           <Typography>Module</Typography>
-          {/* {
+          {
             // (Array.from(new Set(data.modules?.map((module as any) => module.make)))).map((moduleMake: string) => <ModuleFilter make={moduleMake} modules={data.modules?.filter(module => module.make == make)} />)
-            data.modules && data.modules.map((module: any) => module.make).map((moduleMake: string) => {
-              if (data.modules && data.modules.filter((module: GetTypes.BatteryModule) => module.make == moduleMake).length != 0) {
-                return <ModuleFilter make={moduleMake} modules={data.modules.filter((module: GetTypes.BatteryModule) => module.make == moduleMake)} />
-              }
-            }
-          } */}
+            data.modules && popularMakes.map((make: string, j: number) =>
+              (data.modules.filter((module: GetTypes.BatteryModule) => module.make == make).length != 0) &&
+              <ModuleFilter make={make} modules={data.modules.filter((module: GetTypes.BatteryModule) => module.make == make)} key={j.toString()} />
+            )
+          }
         </Grid>
         <Grid item lg={9}>
           {/* what about a sort child component here that would take filteredBatteries and deal with sorting only, no queries */}
