@@ -1,4 +1,5 @@
 import { InMemoryCache, Reference, makeVar } from '@apollo/client';
+import { moduleGenerations } from './utils/constants';
 
 export const cache: InMemoryCache = new InMemoryCache({
   typePolicies: {
@@ -40,6 +41,16 @@ export const cache: InMemoryCache = new InMemoryCache({
           }
         }
       }
+    },
+    Battery: {
+    fields: {
+        moduleCount: {
+          read(_, {variables}) {
+            return 28
+            // return moduleGenerations[variables.make].find(generation => generation.name = variables.generation).moduleCount
+          }
+        }
+      }
     }
   }
 });
@@ -47,4 +58,4 @@ export const cache: InMemoryCache = new InMemoryCache({
 export const isLoggedInVar =
   makeVar<boolean>(!!localStorage.getItem('token'));
 export const cartItemsVar = makeVar<string[]>([]);
-export const listingFilterVar = makeVar<{model: string[], module: string[], generation: string[]}>({model: [], module: [], generation: []});
+export const listingFilterVar = makeVar<{model: string[], moduleId: string[], generation: string[]}>({model: [], moduleId: [], generation: []});

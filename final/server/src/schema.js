@@ -21,26 +21,26 @@ const BatteryType = new GraphQLObjectType({
 });
 
 // source: https://graphql.org/graphql-js/constructing-types/
-const ModuleType = new GraphQLObjectType({
-  name: "Module",
-  fields: {
-    _id: { type: GraphQLObjectId },
-    name: { type: GraphQLString },
-    make: { type: GraphQLString },
-    model: { type: GraphQLString },
-    firstYear: { type: GraphQLInt },
-    lastYear: { type: GraphQLInt },
-  },
-});
+// const ModuleType = new GraphQLObjectType({
+//   name: "Module",
+//   fields: {
+//     _id: { type: GraphQLObjectId },
+//     name: { type: GraphQLString },
+//     make: { type: GraphQLString },
+//     model: { type: GraphQLString },
+//     firstYear: { type: GraphQLInt },
+//     lastYear: { type: GraphQLInt },
+//   },
+// });
 
-const modulesQueryType = new GraphQLObjectType({
-  name: "Query",
-  fields: {
-    modules: {
-      type: new GraphQLList(ModuleType),
-    },
-  },
-});
+// const modulesQueryType = new GraphQLObjectType({
+//   name: "Query",
+//   fields: {
+//     modules: {
+//       type: new GraphQLList(ModuleType),
+//     },
+//   },
+// });
 
 // source (directive): https://www.accountsjs.com/docs/getting-started/
 const typeDefs = gql`
@@ -59,9 +59,9 @@ const typeDefs = gql`
     ): LaunchConnection!
     launch(id: ID!): Launch
     me: BasicUser
-    listings: [Battery]
+    listings: [Battery]!
     filteredListings(batteryFilter: BatteryFilter): [Battery]
-    modules: [Module]
+    modules: [BatteryModule]!
     listing(id: ID!): Battery
     authenticatedQuery: String
   }
@@ -125,9 +125,8 @@ const typeDefs = gql`
     make: String!
     model: String!
     generation: String!
-    module: Module
-    moduleId: GraphQLObjectId
-    moduleCount: Int
+    moduleId: GraphQLObjectId!
+    module: BatteryModule
     year: Int
     subModel: String
     generationStart: String
@@ -146,12 +145,13 @@ const typeDefs = gql`
     isWarrantied: Boolean
     odometerThousands: Int
     isComplete: Boolean
+    moduleCount: Int
   }
 
-  type Module {
-    _id: GraphQLObjectId
-    name: String
-    make: String
+  type BatteryModule {
+    _id: GraphQLObjectId!
+    name: String!
+    make: String!
     models: [String]
     firstYear: Int
     lastYear: Int
@@ -159,9 +159,9 @@ const typeDefs = gql`
   }
 
   input BatteryFilter {
-    model: [String]
-    generation: [String]
-    module: [String]
+    model: [String]!
+    generation: [String]!
+    moduleId: [String]!
   }
 
   enum PatchSize {
@@ -170,4 +170,4 @@ const typeDefs = gql`
   }
 `;
 
-module.exports = { typeDefs, modulesQueryType };
+module.exports = { typeDefs };

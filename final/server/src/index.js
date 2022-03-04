@@ -15,7 +15,7 @@ const { mergeTypeDefs, mergeResolvers } = require("@graphql-tools/merge");
 
 const isEmail = require("isemail");
 
-const { typeDefs, modulesQueryType } = require("./schema");
+const { typeDefs } = require("./schema");
 const resolvers = require("./resolvers");
 const { createStore } = require("./utils");
 const ListingAPI = require("./datasources/listing");

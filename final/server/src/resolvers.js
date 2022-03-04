@@ -1,6 +1,7 @@
 const { paginateResults } = require("./utils");
 const AccountsServer = require("@accounts/server");
 const { authenticated } = require("@accounts/graphql-api");
+const ObjectId = require("mongodb").ObjectId;
 
 module.exports = {
   Query: {
@@ -109,7 +110,7 @@ module.exports = {
   Battery: {
     module: async (battery, _, { dataSources }) => {
       const module = await dataSources.moduleAPI.getModuleById({
-        moduleId: battery.moduleId,
+        moduleId: ObjectId(battery.moduleId),
       });
       return module;
     },

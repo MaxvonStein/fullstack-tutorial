@@ -36,7 +36,7 @@
     "run:ios-demo": "npx artillery run apollo-internal-demos/ios-workload.yml",
     "codegen": "graphql-codegen --config codegen.yml",
     "codegen-watch": "graphql-codegen --config codegen.yml --watch",
-    "codegen-client-codegen": "apollo client:codegen --target typescript --watch"
+    "codegen-client-codegen": "apollo client:codegen --localSchemaFile=./src/index.tsx --target typescript"
   },
   "eslintConfig": {
     "extends": "react-app"

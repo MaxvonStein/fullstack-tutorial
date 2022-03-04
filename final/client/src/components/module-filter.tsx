@@ -8,32 +8,43 @@ import { listingFilterVar } from '../cache';
 
 const whetherArraysEqual = (a: any[], b: any[]): boolean => JSON.stringify(a) === JSON.stringify(b)
 
-interface ModuleFilterProps {
-  make: string
-  modules: string[]
+interface Module {
+  _id: string
+  name: string
+  model: string
+  firstYear: number
+  lastYear: number
 }
 
+interface ModuleFilterProps {
+  make: string
+  modules: GetTypes.BatteryModule[]
+}
+
+// Fix the parameters here, maybe they should be a list of module objects
+
 const ModuleFilter: React.FC<ModuleFilterProps> = ({ make, modules }) => {
+  // take in a module prop so we can 
   const [checked, setChecked] = React.useState(Array(modules.length).fill(false));
 
-  const handleModuleChange = (event: React.ChangeEvent<HTMLInputElement>, module: string) => {
-    listingFilterVar({ ...listingFilterVar(), module: event.target.checked ? [...listingFilterVar().module, module] : [...listingFilterVar().module.filter(m => m != module)] })
+  const handleModuleChange = (event: React.ChangeEvent<HTMLInputElement>, moduleId: string) => {
+    listingFilterVar({ ...listingFilterVar(), moduleId: event.target.checked ? [...listingFilterVar().moduleId, moduleId] : [...listingFilterVar().moduleId.filter(m => m != moduleId)] })
   };
 
-  const handleModulesChange = (event: React.ChangeEvent<HTMLInputElement>, modules: string[]) => {
-    listingFilterVar({ ...listingFilterVar(), module: event.target.checked ? [...listingFilterVar().module, ...modules] : [...listingFilterVar().module.filter(m => !modules.includes(m))] })
+  const handleModulesChange = (event: React.ChangeEvent<HTMLInputElement>, moduleIds: string[]) => {
+    listingFilterVar({ ...listingFilterVar(), moduleId: event.target.checked ? [...listingFilterVar().moduleId, ...moduleIds] : [...listingFilterVar().moduleId.filter(m => !moduleIds.includes(m))] })
   }
 
   const children = (
     <Box sx={{ display: 'flex', flexDirection: 'column', ml: 3 }}>
       {modules.map((module, i) =>
         <FormControlLabel
-          label={module}
+          label={module.name}
           name="module"
-          value={module}
+          value={module._id}
           control={<Checkbox checked={checked[i]} onChange={event => {
             setChecked(checked.map((item, j) => j == i ? event.target.checked : item))
-            handleModuleChange(event, module)
+            handleModuleChange(event, module._id)
           }} />}
         />
       )}
@@ -53,7 +64,7 @@ const ModuleFilter: React.FC<ModuleFilterProps> = ({ make, modules }) => {
             indeterminate={checked.some(element => element !== checked[0])}
             onChange={event => {
               setChecked(Array(checked.length).fill(event.target.checked));
-              handleModulesChange(event, modules);
+              handleModulesChange(event, modules.map(module => module._id));
             }}
           />
         }

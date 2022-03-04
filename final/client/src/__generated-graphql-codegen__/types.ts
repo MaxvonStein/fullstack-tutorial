@@ -13,6 +13,7 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
+  GraphQLObjectId: any;
 };
 
 export type Query = {
@@ -24,9 +25,11 @@ export type Query = {
   isLoggedIn: Scalars['Boolean'];
   launch?: Maybe<Launch>;
   launches: LaunchConnection;
+  listing?: Maybe<Battery>;
   listingFilter: ListingFilter;
-  listings?: Maybe<Array<Maybe<Battery>>>;
+  listings: Array<Maybe<Battery>>;
   me?: Maybe<BasicUser>;
+  modules: Array<Maybe<BatteryModule>>;
   twoFactorSecret?: Maybe<TwoFactorSecretKey>;
 };
 
@@ -46,9 +49,15 @@ export type QueryLaunchesArgs = {
   pageSize?: InputMaybe<Scalars['Int']>;
 };
 
+
+export type QueryListingArgs = {
+  id: Scalars['ID'];
+};
+
 export type BatteryFilter = {
-  generation?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
-  model?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  generation: Array<InputMaybe<Scalars['String']>>;
+  model: Array<InputMaybe<Scalars['String']>>;
+  moduleId: Array<InputMaybe<Scalars['String']>>;
 };
 
 export type Battery = {
@@ -68,13 +77,26 @@ export type Battery = {
   isWarrantied?: Maybe<Scalars['Boolean']>;
   make: Scalars['String'];
   model: Scalars['String'];
-  module: Scalars['String'];
+  module?: Maybe<BatteryModule>;
+  moduleCount?: Maybe<Scalars['Int']>;
+  moduleId: Scalars['GraphQLObjectId'];
   odometerThousands?: Maybe<Scalars['Int']>;
   partGrade?: Maybe<Scalars['String']>;
   price?: Maybe<Scalars['Int']>;
   sellerType?: Maybe<Scalars['String']>;
   subModel?: Maybe<Scalars['String']>;
   year?: Maybe<Scalars['Int']>;
+};
+
+export type BatteryModule = {
+  __typename?: 'BatteryModule';
+  _id: Scalars['GraphQLObjectId'];
+  firstYear?: Maybe<Scalars['Int']>;
+  kwh?: Maybe<Scalars['Float']>;
+  lastYear?: Maybe<Scalars['Int']>;
+  make: Scalars['String'];
+  models?: Maybe<Array<Maybe<Scalars['String']>>>;
+  name: Scalars['String'];
 };
 
 export type User = {
@@ -136,9 +158,9 @@ export type LaunchConnection = {
 
 export type ListingFilter = {
   __typename?: 'ListingFilter';
-  generation: Array<Maybe<Scalars['String']>>;
-  model: Array<Maybe<Scalars['String']>>;
-  module: Array<Maybe<Scalars['String']>>;
+  generation: Scalars['String'];
+  model: Scalars['String'];
+  moduleId: Scalars['String'];
 };
 
 export type BasicUser = {
@@ -373,10 +395,10 @@ export type IsUserLoggedInQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type IsUserLoggedInQuery = { __typename?: 'Query', isLoggedIn: boolean };
 
-export type GetListingListQueryVariables = Exact<{ [key: string]: never; }>;
+export type ListingsForBatteriesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetListingListQuery = { __typename?: 'Query', listingFilter: { __typename?: 'ListingFilter', model: Array<string | null>, module: Array<string | null>, generation: Array<string | null> }, listings?: Array<{ __typename: 'Battery', make: string, model: string, imageSrc?: string | null, generation: string, module: string, isComplete?: boolean | null, year?: number | null, subModel?: string | null, generationStart?: string | null, generationEnd?: string | null, description?: string | null, partGrade?: string | null, dealer?: string | null, distance?: number | null, price?: number | null, isReman?: boolean | null, isCore?: boolean | null, isNoShip?: boolean | null, isShippingAvailable?: boolean | null, sellerType?: string | null, isWarrantied?: boolean | null, odometerThousands?: number | null } | null> | null };
+export type ListingsForBatteriesQuery = { __typename?: 'Query', listings: Array<{ __typename?: 'Battery', make: string, model: string, moduleId: any, generation: string, imageSrc?: string | null, isComplete?: boolean | null, year?: number | null, dealer?: string | null, price?: number | null, sellerType?: string | null, odometerThousands?: number | null } | null>, modules: Array<{ __typename?: 'BatteryModule', make: string } | null>, listingFilter: { __typename?: 'ListingFilter', model: Array<string | null>, moduleId: Array<string | null>, generation: Array<string | null> } };
 
 export type GetFilteredListingsQueryVariables = Exact<{
   batteryFilter?: InputMaybe<BatteryFilter>;
@@ -607,68 +629,58 @@ export function useIsUserLoggedInLazyQuery(baseOptions?: Apollo.LazyQueryHookOpt
 export type IsUserLoggedInQueryHookResult = ReturnType<typeof useIsUserLoggedInQuery>;
 export type IsUserLoggedInLazyQueryHookResult = ReturnType<typeof useIsUserLoggedInLazyQuery>;
 export type IsUserLoggedInQueryResult = Apollo.QueryResult<IsUserLoggedInQuery, IsUserLoggedInQueryVariables>;
-export const GetListingListDocument = gql`
-    query GetListingList {
-  listingFilter @client {
-    model
-    module
-    generation
-  }
+export const ListingsForBatteriesDocument = gql`
+    query ListingsForBatteries {
   listings {
-    __typename
     make
     model
-    imageSrc
+    moduleId
     generation
-    module
+    imageSrc
     isComplete
     year
-    subModel
-    generationStart
-    generationEnd
-    description
-    partGrade
     dealer
-    distance
     price
-    isReman
-    isCore
-    isNoShip
-    isShippingAvailable
     sellerType
-    isWarrantied
     odometerThousands
-    isComplete
+  }
+  modules {
+    make
+  }
+  listingFilter @client {
+    model
+    moduleId
+    generation
   }
 }
     `;
 
 /**
- * __useGetListingListQuery__
+ * __useListingsForBatteriesQuery__
  *
- * To run a query within a React component, call `useGetListingListQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetListingListQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useListingsForBatteriesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useListingsForBatteriesQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useGetListingListQuery({
+ * const { data, loading, error } = useListingsForBatteriesQuery({
  *   variables: {
  *   },
  * });
  */
-export function useGetListingListQuery(baseOptions?: Apollo.QueryHookOptions<GetListingListQuery, GetListingListQueryVariables>) {
+export function useListingsForBatteriesQuery(baseOptions?: Apollo.QueryHookOptions<ListingsForBatteriesQuery, ListingsForBatteriesQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetListingListQuery, GetListingListQueryVariables>(GetListingListDocument, options);
+        return Apollo.useQuery<ListingsForBatteriesQuery, ListingsForBatteriesQueryVariables>(ListingsForBatteriesDocument, options);
       }
-export function useGetListingListLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetListingListQuery, GetListingListQueryVariables>) {
+export function useListingsForBatteriesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ListingsForBatteriesQuery, ListingsForBatteriesQueryVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetListingListQuery, GetListingListQueryVariables>(GetListingListDocument, options);
+          return Apollo.useLazyQuery<ListingsForBatteriesQuery, ListingsForBatteriesQueryVariables>(ListingsForBatteriesDocument, options);
         }
-export type GetListingListQueryHookResult = ReturnType<typeof useGetListingListQuery>;
-export type GetListingListLazyQueryHookResult = ReturnType<typeof useGetListingListLazyQuery>;
-export type GetListingListQueryResult = Apollo.QueryResult<GetListingListQuery, GetListingListQueryVariables>;
+export type ListingsForBatteriesQueryHookResult = ReturnType<typeof useListingsForBatteriesQuery>;
+export type ListingsForBatteriesLazyQueryHookResult = ReturnType<typeof useListingsForBatteriesLazyQuery>;
+export type ListingsForBatteriesQueryResult = Apollo.QueryResult<ListingsForBatteriesQuery, ListingsForBatteriesQueryVariables>;
 export const GetFilteredListingsDocument = gql`
     query GetFilteredListings($batteryFilter: BatteryFilter) {
   listingFilter @client @export(as: "batteryFilter") {
