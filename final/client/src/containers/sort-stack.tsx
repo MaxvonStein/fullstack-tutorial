@@ -6,6 +6,7 @@ import Link from '@mui/material/Link';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import * as GetTypes from '../__generated-graphql-codegen__/types'
+import { getKwhPrice, getModulePrice } from '../utils/functions'
 
 interface SortStackProps {
   batteries: GetTypes.Battery[]
@@ -18,17 +19,29 @@ const options = [
   { name: 'Model', field: 'model' },
   { name: 'Make', field: 'make' },
   { name: 'Seller Type', field: 'sellerType' },
-  { name: 'Warranty/As-is', field: 'model' }
+  { name: 'Warranty/As-is', field: 'isWarrantied' },
+  { name: 'Price /module', field: 'modulePrice' },
+  { name: 'Price /kWh', field: 'kWhPrice' }
 ]
 
 const SortStack: React.FC<SortStackProps> = ({ batteries }) => {
   const [sortField, setSortField] = React.useState('price');
   const [isReverse, setIsReverse] = React.useState(false);
 
+  const compareBy = (field: string) => (a: any, b: any): number => (a[field] > b[field] && isReverse) ? 1 : -1
+
+  const compareModulePrice = (a: any, b: any): number => (getModulePrice(a.price, a.moduleCount) > getModulePrice(b.price, b.moduleCount) && isReverse) ? 1 : -1
+
+  const compareKwhPrice = (a: any, b: any): number => (getKwhPrice(a.price, a.moduleCount) > getKwhPrice(b.price, b.moduleCount) && isReverse) ? 1 : -1
+
   const getCompareBy = (field: string) => {
     // return a compare function
-    return (a: any, b: any): number => {
-      return (a[field] > b[field] && isReverse) ? 1 : -1
+    if (field == 'modulePrice') {
+      return compareModulePrice
+    } else if (field == 'kWhprice') {
+      return compareKwhPrice
+    } else {
+      return compareBy(field)
     }
   }
 

@@ -51,8 +51,13 @@ export const cache: InMemoryCache = new InMemoryCache({
           }
         },
         shippingCost: {
-          read(_, { variables }) {
-            return 250
+          keyArgs: false,
+          read(existing: any, { readField }) {
+            // later use args from the second param with user's location
+            // existing looks like it's always undefined, not sure why
+            // keyArgs: false doesn't help, the below code runs when navigating back, don't see this field in cache on devtools
+            
+            return Math.round(readField('distance') as number * 0.90 )
           }
         }
       }

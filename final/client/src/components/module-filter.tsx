@@ -26,7 +26,6 @@ interface ModuleFilterProps {
 const ModuleFilter: React.FC<ModuleFilterProps> = ({ make, modules }) => {
   // take in a module prop so we can 
   const [checked, setChecked] = React.useState(Array(modules.length).fill(false));
-  console.log(checked)
 
   const handleModuleChange = (event: React.ChangeEvent<HTMLInputElement>, moduleId: string) => {
     listingFilterVar({ ...listingFilterVar(), moduleId: event.target.checked ? [...listingFilterVar().moduleId, moduleId] : [...listingFilterVar().moduleId.filter(m => m != moduleId)] })

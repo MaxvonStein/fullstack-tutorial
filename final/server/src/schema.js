@@ -138,7 +138,7 @@ const typeDefs = gql`
     description: String
     partGrade: String
     dealer: String
-    distance: Int
+    distance: Int!
     isReman: Boolean
     isCore: Boolean
     isNoShip: Boolean

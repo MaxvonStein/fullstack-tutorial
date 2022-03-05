@@ -34,6 +34,7 @@ const GET_LISTINGS_FOR_BATTERIES = gql`
       isWarrantied
       isCore
       isShippingAvailable
+      distance
       shippingCost @client
       moduleCount @client
       module {
@@ -78,10 +79,6 @@ const Batteries: React.FC<BatteriesProps> = () => {
   const [isLoadingMore, setIsLoadingMore] = useState(false);
 
   const whetherInFilter = (filter: ListingFilterVarType, battery: GetTypes.Battery): boolean => (Object.keys(filter) as Array<keyof ListingFilterVarType>).every(key => {
-    if (battery.make == "Toyota") {
-      debugger;
-    }
-
     return (
       filter[key].length == 0 ||
       (key == 'moduleId' && filter.moduleId.includes(battery.moduleId.toHexString)) ||

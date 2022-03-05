@@ -6,7 +6,7 @@ import Box from '@mui/material/Box'
 import Paper from '@mui/material/Paper'
 import Grid from '@mui/material/Grid'
 import StarBox from './star-box'
-
+import { getKwhPrice, getModulePrice } from '../utils/functions'
 
 interface BatteryItemProps {
   battery: GetTypes.Battery;
@@ -19,9 +19,6 @@ const estimateSOH = (years: number, milesThousands: number): number => {
   // eg. 5/12/2 = .21
   return Math.round((1 - driveWear - ageWear) * 100)
 }
-
-const getKwhPrice = (price: number, kwh: number) => Math.round(price / kwh)
-const getModulePrice = (price: number, moduleCount: number) => (price / moduleCount).toFixed(2)
 
 const currentDate = new Date()
 const currentYear = currentDate.getFullYear()
@@ -55,7 +52,7 @@ const BatteryItem: React.FC<BatteryItemProps> = ({ battery }) => {
         <Grid item md={2}>
           <Box sx={{ typography: 'subtitle2' }}>Pricing & Terms</Box>
           <Box sx={{ typography: 'body2' }}>${getKwhPrice(battery.price, battery.moduleCount * battery.module.kwh)} /kWh</Box>
-          <Box sx={{ typography: 'body2' }}>${getModulePrice(battery.price, battery.moduleCount)} /module</Box>
+          <Box sx={{ typography: 'body2' }}>${getModulePrice(battery.price, battery.moduleCount).toFixed(2)} /module</Box>
           <Box sx={{ typography: 'body2' }}>{battery.isWarrantied ? "Warranty included" : "As-is"}</Box>
           <Box sx={{ typography: 'body2' }}>{battery.isShippingAvailable ? `Shipping: $${battery.shippingCost}` : "Shipping not available"}</Box>
         </Grid>
