@@ -8,6 +8,7 @@ import Profile from './profile';
 import { Footer, PageContainer } from '../components';
 import Login from './login';
 import Batteries from './batteries';
+import Battery from './battery';
 
 export default function Pages() {
   return (
@@ -21,7 +22,7 @@ export default function Pages() {
           <Cart path="cart" />
           <Profile path="profile" />
           <Batteries path="/" />
-
+          <Battery path="battery/:batteryId" />
         </Router>
       </PageContainer>
       <Footer />

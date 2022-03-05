@@ -153,7 +153,7 @@ const typeDefs = gql`
   type BatteryModule {
     _id: GraphQLObjectId!
     name: String!
-    make: String!
+    make: String
     models: [String]
     firstYear: Int
     lastYear: Int

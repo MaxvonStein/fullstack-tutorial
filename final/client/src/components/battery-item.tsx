@@ -1,23 +1,15 @@
 import React from 'react';
 import { unit } from '../styles';
 import * as GetTypes from '../__generated-graphql-codegen__/types'
-import Link from '@mui/material/Link'
+import { Link } from '@reach/router';
 import Box from '@mui/material/Box'
 import Paper from '@mui/material/Paper'
 import Grid from '@mui/material/Grid'
 import StarBox from './star-box'
-import { getKwhPrice, getModulePrice } from '../utils/functions'
+import { getKwhPrice, getModulePrice, estimateSOH } from '../utils/functions'
 
 interface BatteryItemProps {
   battery: GetTypes.Battery;
-}
-
-const estimateSOH = (years: number, milesThousands: number): number => {
-  const driveWear = milesThousands / 150 / 2
-  // eg. 27/150/2 = .09
-  const ageWear = years / 12 / 2
-  // eg. 5/12/2 = .21
-  return Math.round((1 - driveWear - ageWear) * 100)
 }
 
 const currentDate = new Date()
@@ -27,7 +19,7 @@ const currentYear = currentDate.getFullYear()
 const BatteryItem: React.FC<BatteryItemProps> = ({ battery }) => {
   const { make, model } = battery;
   return (
-    <Paper sx={{ p: 2 }} key={battery._id}>
+    <Paper component={Link} sx={{ p: 2 }} key={battery._id} to={`/battery/${battery._id}`} >
       <Grid container spacing={2}>
         <Grid item md={2}>
           <img src={battery.imageSrc ? battery.imageSrc : ""}></img>

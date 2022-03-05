@@ -96,7 +96,7 @@ export type BatteryModule = {
   firstYear?: Maybe<Scalars['Int']>;
   kwh: Scalars['Float'];
   lastYear?: Maybe<Scalars['Int']>;
-  make: Scalars['String'];
+  make?: Maybe<Scalars['String']>;
   models?: Maybe<Array<Maybe<Scalars['String']>>>;
   name: Scalars['String'];
 };
@@ -407,7 +407,14 @@ export type GetFilteredListingsQuery = { __typename?: 'Query', listingFilter: { 
 export type ListingsForBatteriesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type ListingsForBatteriesQuery = { __typename?: 'Query', listings: Array<{ __typename?: 'Battery', _id: any, make: string, model: string, moduleId: any, generation: string, imageSrc?: string | null, isComplete?: boolean | null, year?: number | null, dealer?: string | null, price: number, sellerType?: string | null, odometerThousands?: number | null, isWarrantied?: boolean | null, isCore?: boolean | null, isShippingAvailable?: boolean | null, distance: number, shippingCost: number, moduleCount: number, module: { __typename?: 'BatteryModule', kwh: number } } | null>, modules: Array<{ __typename?: 'BatteryModule', _id: any, name: string, make: string } | null>, listingFilter: { __typename?: 'ListingFilter', model: Array<string | null>, moduleId: Array<string | null>, generation: Array<string | null> } };
+export type ListingsForBatteriesQuery = { __typename?: 'Query', listings: Array<{ __typename?: 'Battery', _id: any, make: string, model: string, moduleId: any, generation: string, imageSrc?: string | null, isComplete?: boolean | null, year?: number | null, dealer?: string | null, price: number, sellerType?: string | null, odometerThousands?: number | null, isWarrantied?: boolean | null, isCore?: boolean | null, isShippingAvailable?: boolean | null, distance: number, shippingCost: number, moduleCount: number, module: { __typename?: 'BatteryModule', kwh: number } } | null>, modules: Array<{ __typename?: 'BatteryModule', _id: any, name: string, make?: string | null } | null>, listingFilter: { __typename?: 'ListingFilter', model: Array<string | null>, moduleId: Array<string | null>, generation: Array<string | null> } };
+
+export type BatteryDetailsQueryVariables = Exact<{
+  batteryId: Scalars['ID'];
+}>;
+
+
+export type BatteryDetailsQuery = { __typename?: 'Query', listing?: { __typename?: 'Battery', _id: any, make: string, model: string, generation: string, price: number, description?: string | null, distance: number, moduleId: any, moduleCount: number, shippingCost: number, module: { __typename?: 'BatteryModule', _id: any, name: string, kwh: number } } | null };
 
 export type GetCartItemsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -754,6 +761,55 @@ export function useListingsForBatteriesLazyQuery(baseOptions?: Apollo.LazyQueryH
 export type ListingsForBatteriesQueryHookResult = ReturnType<typeof useListingsForBatteriesQuery>;
 export type ListingsForBatteriesLazyQueryHookResult = ReturnType<typeof useListingsForBatteriesLazyQuery>;
 export type ListingsForBatteriesQueryResult = Apollo.QueryResult<ListingsForBatteriesQuery, ListingsForBatteriesQueryVariables>;
+export const BatteryDetailsDocument = gql`
+    query BatteryDetails($batteryId: ID!) {
+  listing(id: $batteryId) {
+    _id
+    make
+    model
+    generation
+    price
+    description
+    distance
+    moduleId
+    moduleCount
+    module {
+      _id
+      name
+      kwh
+    }
+    shippingCost @client
+  }
+}
+    `;
+
+/**
+ * __useBatteryDetailsQuery__
+ *
+ * To run a query within a React component, call `useBatteryDetailsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useBatteryDetailsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useBatteryDetailsQuery({
+ *   variables: {
+ *      batteryId: // value for 'batteryId'
+ *   },
+ * });
+ */
+export function useBatteryDetailsQuery(baseOptions: Apollo.QueryHookOptions<BatteryDetailsQuery, BatteryDetailsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<BatteryDetailsQuery, BatteryDetailsQueryVariables>(BatteryDetailsDocument, options);
+      }
+export function useBatteryDetailsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<BatteryDetailsQuery, BatteryDetailsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<BatteryDetailsQuery, BatteryDetailsQueryVariables>(BatteryDetailsDocument, options);
+        }
+export type BatteryDetailsQueryHookResult = ReturnType<typeof useBatteryDetailsQuery>;
+export type BatteryDetailsLazyQueryHookResult = ReturnType<typeof useBatteryDetailsLazyQuery>;
+export type BatteryDetailsQueryResult = Apollo.QueryResult<BatteryDetailsQuery, BatteryDetailsQueryVariables>;
 export const GetCartItemsDocument = gql`
     query GetCartItems {
   cartItems @client
