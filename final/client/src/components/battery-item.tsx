@@ -19,7 +19,7 @@ const currentYear = currentDate.getFullYear()
 const BatteryItem: React.FC<BatteryItemProps> = ({ battery }) => {
   const { make, model } = battery;
   return (
-    <Paper component={Link} sx={{ p: 2 }} key={battery._id} to={`/battery/${battery._id}`} >
+    <Paper component={Link} sx={{ p: 2, textDecoration: 'none' }} key={battery._id} to={`/battery/${battery._id}`} >
       <Grid container spacing={2}>
         <Grid item md={2}>
           <img src={battery.imageSrc ? battery.imageSrc : ""}></img>
@@ -28,6 +28,7 @@ const BatteryItem: React.FC<BatteryItemProps> = ({ battery }) => {
           <Box sx={{ typography: 'body1' }}>{`${make} ${model}`}</Box>
           <Box sx={{ typography: 'body2' }}>{battery.isComplete ? 'Complete pack' : 'Not complete'}</Box>
           <Box sx={{ typography: 'body2' }}>{`$${battery.price}`}</Box>
+          <Box sx={{ typography: 'body2' }}>{`$${battery.price + battery.shippingCost} with shipping`}</Box>
         </Grid>
         <Grid item md={2}>
           <Box sx={{ typography: 'subtitle2' }}>Vehicle</Box>

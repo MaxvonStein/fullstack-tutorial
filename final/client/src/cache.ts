@@ -57,7 +57,7 @@ export const cache: InMemoryCache = new InMemoryCache({
             // existing looks like it's always undefined, not sure why
             // keyArgs: false doesn't help, the below code runs when navigating back, don't see this field in cache on devtools
             
-            return Math.round(readField('distance') as number * 0.90 )
+            return Math.max(150, Math.round(readField('distance') as number * 0.90 ))
           }
         }
       }

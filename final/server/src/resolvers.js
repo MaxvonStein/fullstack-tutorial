@@ -3,6 +3,8 @@ const AccountsServer = require("@accounts/server");
 const { authenticated } = require("@accounts/graphql-api");
 const ObjectId = require("mongodb").ObjectId;
 
+const completeListingFindQuery = { price: { $gte: 150 } };
+
 module.exports = {
   Query: {
     launches: async (_, { pageSize = 20, after }, { dataSources }) => {
@@ -35,7 +37,8 @@ module.exports = {
     //   return dataSources.listingAPI.getListings();
     // }),
     modules: (_, __, { dataSources }) => dataSources.moduleAPI.getModules(),
-    listings: (_, __, { dataSources }) => dataSources.listingAPI.getListings(),
+    listings: (_, __, { dataSources }) =>
+      dataSources.listingAPI.getListings(completeListingFindQuery),
     // temporarily add a generation until mongo server catches up
     // listings: async (_, __, { dataSources }) => {
     //   let response = await dataSources.listingAPI.getListings();
