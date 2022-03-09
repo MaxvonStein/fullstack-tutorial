@@ -34,35 +34,39 @@ const FilterAccordion = styled(Accordion)`
   }
 `;
 
-interface ModelFilterProps {
-  make: string
-  models: string[]
+type Field = "model" | "moduleId" | "generation";
+
+interface FieldFilterProps {
+  field: Field
+  values: string[]
+  label: string
+  names?: string[]
 }
 
-const ModelFilter: React.FC<ModelFilterProps> = ({ make, models }) => {
-  const [checked, setChecked] = React.useState(Array(models.length).fill(false));
+const FieldFilter: React.FC<FieldFilterProps> = ({ field, values, label, names }) => {
+  const [checked, setChecked] = React.useState(Array(values.length).fill(false));
   const [expanded, setExpanded] = React.useState(false);
 
-  const handleModelChange = (event: React.ChangeEvent<HTMLInputElement>, model: string) => {
-    listingFilterVar({ ...listingFilterVar(), generation: event.target.checked ? [...listingFilterVar().generation, model] : [...listingFilterVar().generation.filter(m => m != model)] })
+  const handleValueChange = (event: React.ChangeEvent<HTMLInputElement>, model: string) => {
+    listingFilterVar({ ...listingFilterVar(), [field]: event.target.checked ? [...listingFilterVar()[field], model] : [...listingFilterVar()[field].filter(m => m != model)] })
   };
 
-  const handleModelsChange = (event: React.ChangeEvent<HTMLInputElement>, models: string[]) => {
-    listingFilterVar({ ...listingFilterVar(), generation: event.target.checked ? [...listingFilterVar().generation, ...models] : [...listingFilterVar().generation.filter(m => !models.includes(m))] })
+  const handleValuesChange = (event: React.ChangeEvent<HTMLInputElement>, values: string[]) => {
+    listingFilterVar({ ...listingFilterVar(), [field]: event.target.checked ? [...listingFilterVar()[field], ...values] : [...listingFilterVar()[field].filter(v => !values.includes(v))] })
   }
 
   const toggleExpanded = () => setExpanded(prev => !prev)
 
   const children = (
     <Box sx={{ display: 'flex', flexDirection: 'column', ml: 3 }}>
-      {models.map((model, i) =>
+      {values.map((value, i) =>
         <FormControlLabel
-          label={model}
-          name="model"
-          value={model}
+          label={names ? names[i] : value}
+          name={label}
+          value={value}
           control={<Checkbox size="small" checked={checked[i]} onChange={event => {
             setChecked(checked.map((item, j) => j == i ? event.target.checked : item))
-            handleModelChange(event, model)
+            handleValueChange(event, value)
           }} />}
           key={i.toString()} />
       )}
@@ -74,9 +78,8 @@ const ModelFilter: React.FC<ModelFilterProps> = ({ make, models }) => {
       <FilterAccordion expanded={expanded} square={true} variant={'outlined'}>
         <AccordionSummary expandIcon={<ExpandMoreIcon onClick={toggleExpanded} fontSize="small" />}>
           <FormControlLabel
-            label={make}
-            name="make"
-            value={make}
+            label={label}
+            name={field}
             control={
               <Checkbox
                 // maybe there's a more efficient function here, like a reducer that stops as soon as it's false
@@ -86,7 +89,7 @@ const ModelFilter: React.FC<ModelFilterProps> = ({ make, models }) => {
                 onChange={event => {
                   setExpanded(true);
                   setChecked(Array(checked.length).fill(event.target.checked));
-                  handleModelsChange(event, models);
+                  handleValuesChange(event, values);
                 }}
               />
             }
@@ -102,4 +105,4 @@ const ModelFilter: React.FC<ModelFilterProps> = ({ make, models }) => {
   );
 }
 
-export default ModelFilter;
+export default FieldFilter;
