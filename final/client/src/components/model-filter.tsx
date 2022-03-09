@@ -3,14 +3,33 @@ import { unit } from '../styles';
 import * as GetTypes from '../__generated-graphql-codegen__/types'
 import Box from '@mui/material/Box'
 import Checkbox from '@mui/material/Checkbox';
-import Accordion from '@mui/material/Accordion';
+import Accordion, { AccordionProps } from '@mui/material/Accordion';
 import { AccordionSummary } from '@mui/material';
 import { AccordionDetails } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import { listingFilterVar } from '../cache';
+import { styled } from '@mui/material/styles';
 
 const whetherArraysEqual = (a: any[], b: any[]): boolean => JSON.stringify(a) === JSON.stringify(b)
+
+const FilterAccordion = styled(Accordion)`
+  & .MuiAccordionSummary-content {
+    margin: 6px 0;
+  }
+  & .MuiFormControlLabel-label {
+    font-size: 0.875rem;
+  }
+  & .MuiAccordionSummary-content.Mui-expanded {
+    margin: 0;
+  }
+  & .MuiAccordionDetails-root {
+    padding: 0 16px;
+    & > .MuiBox-root > .MuiBox-root {
+      margin-left: 14px;
+    }
+  }
+`;
 
 interface ModelFilterProps {
   make: string
@@ -38,7 +57,7 @@ const ModelFilter: React.FC<ModelFilterProps> = ({ make, models }) => {
           label={model}
           name="model"
           value={model}
-          control={<Checkbox checked={checked[i]} onChange={event => {
+          control={<Checkbox size="small" checked={checked[i]} onChange={event => {
             setChecked(checked.map((item, j) => j == i ? event.target.checked : item))
             handleModelChange(event, model)
           }} />}
@@ -49,8 +68,8 @@ const ModelFilter: React.FC<ModelFilterProps> = ({ make, models }) => {
 
   return (
     <Box>
-      <Accordion expanded={expanded} >
-        <AccordionSummary expandIcon={<ExpandMoreIcon onClick={toggleExpanded} />}>
+      <FilterAccordion expanded={expanded} square={true} variant={'outlined'}>
+        <AccordionSummary expandIcon={<ExpandMoreIcon onClick={toggleExpanded} fontSize="small" />}>
           <FormControlLabel
             label={make}
             name="make"
@@ -58,6 +77,7 @@ const ModelFilter: React.FC<ModelFilterProps> = ({ make, models }) => {
             control={
               <Checkbox
                 // maybe there's a more efficient function here, like a reducer that stops as soon as it's false
+                size="small"
                 checked={whetherArraysEqual(checked, Array(checked.length).fill(true))}
                 indeterminate={checked.some(element => element !== checked[0])}
                 onChange={event => {
@@ -74,7 +94,7 @@ const ModelFilter: React.FC<ModelFilterProps> = ({ make, models }) => {
             {children}
           </Box>
         </AccordionDetails>
-      </Accordion>
+      </FilterAccordion>
     </Box >
   );
 }

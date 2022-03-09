@@ -97,9 +97,9 @@ const Batteries: React.FC<BatteriesProps> = () => {
   return (
     <Fragment>
       <Header />
-      <Grid container>
+      <Grid spacing={1} container>
         <Grid item lg={3}>
-          <Typography>Make & Model</Typography>
+          <Typography>Make & Generation</Typography>
           {
             Object.keys(modelGenerations).map((makeKey: string, i: number) =>
               <ModelFilter make={makeKey} models={(modelGenerations as ModelGenerations)[makeKey].map(generation => generation.name)} key={i.toString()} />

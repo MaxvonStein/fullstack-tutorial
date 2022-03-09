@@ -25,7 +25,7 @@ export default function Pages() {
           <Battery path="battery/:batteryId" />
         </Router>
       </PageContainer>
-      <Footer />
+      {/* <Footer /> */}
     </Fragment>
   );
 }

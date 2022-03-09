@@ -30,9 +30,9 @@ const options = [
   { name: 'Odometer', field: 'odometerThousands' },
   { name: 'Seller Type', field: 'sellerType' },
   { name: 'Seller Name', field: 'dealer' },
-  { name: 'Warranty/As-is', field: 'isWarrantied' },
-  { name: 'Price /module', field: 'modulePrice' },
   { name: 'Price /kWh', field: 'kWhPrice' },
+  { name: 'Price /module', field: 'modulePrice' },
+  { name: 'Warranty/As-is', field: 'isWarrantied' },
   { name: 'Shipping Cost', field: 'shippingCost' },
 ]
 
@@ -70,7 +70,7 @@ const SortStack: React.FC<SortStackProps> = ({ batteries }) => {
   }
 
   return <Fragment>
-    <Grid container spacing={2}>
+    <Grid container spacing={1}>
       <Grid item md={2}>
       </Grid>
       <Grid item md={3}>
