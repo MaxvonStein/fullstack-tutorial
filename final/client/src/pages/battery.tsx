@@ -11,11 +11,19 @@ export const GET_BATTERY_DETAILS = gql`
   query BatteryDetails($batteryId: ID!) {
     listing(id: $batteryId) {
       _id
+      year
       make
       model
-      generation
       price
+      generation
+      imageSrc
       description
+      odometerThousands
+      isComplete
+      dealer
+      isWarrantied
+      isCore
+      isReman
       distance
       moduleId
       moduleCount
@@ -23,6 +31,9 @@ export const GET_BATTERY_DETAILS = gql`
         _id
         name
         kwh
+        firstYear
+        lastYear
+        models
       }
       shippingCost @client
     }

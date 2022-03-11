@@ -7,14 +7,11 @@ import Paper from '@mui/material/Paper'
 import Grid from '@mui/material/Grid'
 import StarBox from './star-box'
 import { getKwhPrice, getModulePrice, estimateSOH } from '../utils/functions'
+import { currentYear } from '../utils/dates'
 
 interface BatteryItemProps {
   battery: GetTypes.Battery;
 }
-
-const currentDate = new Date()
-const currentYear = currentDate.getFullYear()
-
 
 const BatteryItem: React.FC<BatteryItemProps> = ({ battery }) => {
   const { make, model } = battery;
@@ -22,7 +19,7 @@ const BatteryItem: React.FC<BatteryItemProps> = ({ battery }) => {
     <Paper component={Link} elevation={1} sx={{ p: 1, marginBottom: 1, textDecoration: 'none' }} key={battery._id} to={`/battery/${battery._id}`} >
       <Grid container spacing={1}>
         <Grid item md={2}>
-          <img src={battery.imageSrc ? battery.imageSrc : ""}></img>
+          <img src={battery.imageSrc ? battery.imageSrc : ""} />
         </Grid>
         <Grid item md={3}>
           <Box sx={{ typography: 'body1' }}>{`${make} ${model}`}</Box>

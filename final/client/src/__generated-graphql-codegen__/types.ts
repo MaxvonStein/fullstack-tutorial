@@ -414,7 +414,7 @@ export type BatteryDetailsQueryVariables = Exact<{
 }>;
 
 
-export type BatteryDetailsQuery = { __typename?: 'Query', listing?: { __typename?: 'Battery', _id: any, make: string, model: string, generation: string, price: number, description?: string | null, distance: number, moduleId: any, moduleCount: number, shippingCost: number, module: { __typename?: 'BatteryModule', _id: any, name: string, kwh: number } } | null };
+export type BatteryDetailsQuery = { __typename?: 'Query', listing?: { __typename?: 'Battery', _id: any, year?: number | null, make: string, model: string, price: number, generation: string, imageSrc?: string | null, description?: string | null, odometerThousands?: number | null, isComplete?: boolean | null, dealer?: string | null, isWarrantied?: boolean | null, isCore?: boolean | null, isReman?: boolean | null, distance: number, moduleId: any, moduleCount: number, shippingCost: number, module: { __typename?: 'BatteryModule', _id: any, name: string, kwh: number, firstYear?: number | null, lastYear?: number | null, models?: Array<string | null> | null } } | null };
 
 export type GetCartItemsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -765,11 +765,19 @@ export const BatteryDetailsDocument = gql`
     query BatteryDetails($batteryId: ID!) {
   listing(id: $batteryId) {
     _id
+    year
     make
     model
-    generation
     price
+    generation
+    imageSrc
     description
+    odometerThousands
+    isComplete
+    dealer
+    isWarrantied
+    isCore
+    isReman
     distance
     moduleId
     moduleCount
@@ -777,6 +785,9 @@ export const BatteryDetailsDocument = gql`
       _id
       name
       kwh
+      firstYear
+      lastYear
+      models
     }
     shippingCost @client
   }

@@ -9,10 +9,12 @@ import { Footer, PageContainer } from '../components';
 import Login from './login';
 import Batteries from './batteries';
 import Battery from './battery';
+import NavBar from '../components/nav-bar';
 
 export default function Pages() {
   return (
     <Fragment>
+      <NavBar />
       <PageContainer>
         <Router primary={false} component={Fragment}>
           <Batteries path="/batteries" />
@@ -25,7 +27,6 @@ export default function Pages() {
           <Battery path="battery/:batteryId" />
         </Router>
       </PageContainer>
-      {/* <Footer /> */}
     </Fragment>
   );
 }
